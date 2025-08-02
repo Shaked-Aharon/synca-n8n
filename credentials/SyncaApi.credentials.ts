@@ -25,7 +25,7 @@ export class SyncaApi implements ICredentialType {
         displayName: 'Base URL',
         name: 'baseUrl',
         type: 'string',
-        default: 'http://87.71.191.82',
+        default: 'https://n8n-api.synca.co.il',
         description: 'Base URL of your Synca instance',
       },
 	];
