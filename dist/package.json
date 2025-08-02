@@ -1,5 +1,5 @@
 {
-    "name": "@synca-n8n/nodes",
+    "name": "n8n-nodes-synca",
     "version": "1.0.0",
     "description": "Custom API node for synca using n8n with CRUD operations",
     "keywords": [

@@ -34,7 +34,7 @@
 	"n8n": {
 		"n8nNodesApiVersion": 1,
 		"credentials": [
-			"dist/credentials/CustomApiCredentials.credentials.js"
+			"dist/credentials/SyncaApi.credentials.js"
 		],
 		"nodes": [
 			"dist/nodes/Cashcow/SyncaCashcow.node.js",
