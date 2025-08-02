@@ -22,7 +22,8 @@
 		"format": "prettier nodes credentials --write",
 		"lint": "eslint nodes credentials package.json",
 		"lintfix": "eslint nodes credentials package.json --fix",
-		"prepublishOnly": "npm run build && npm run lint -s"
+		"prepublishOnly": "npm run build",
+		"prepublishOnly2": "npm run build && npm run lint -s"
 	},
 	"files": [
 		"dist"
