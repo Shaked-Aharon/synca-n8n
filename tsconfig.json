@@ -22,6 +22,7 @@
 		"outDir": "./dist/",
 	},
 	"include": [
+		"index.ts",
 		"credentials/**/*",
 		"nodes/Cashcow/constants/**/*",
 		"nodes/**/*",
