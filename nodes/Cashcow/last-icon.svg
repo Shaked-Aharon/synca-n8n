@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Cashcow – simplified vector icon  -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="40 25 160 160"
+  width="120"
+  height="120"
+  aria-labelledby="title desc"
+>
+  <title id="title">Cashcow logo icon</title>
+  <desc id="desc">Cartoon cow mascot standing beside the text CA$HCOW</desc>
+
+  <!--  1. Cow mascot  -->
+  <g id="cow" transform="translate(35,15)">
+    <!-- Ears -->
+    <ellipse cx="47" cy="30" rx="15" ry="10" fill="#c8c8c8"/>
+    <ellipse cx="123" cy="30" rx="15" ry="10" fill="#c8c8c8"/>
+
+    <!-- Head -->
+    <circle cx="85" cy="55" r="40" fill="#fafafa" stroke="#666" stroke-width="2"/>
+
+    <!-- Face / muzzle -->
+    <ellipse cx="85" cy="80" rx="42" ry="28" fill="#f4d3c8" stroke="#666" stroke-width="2"/>
+    <circle cx="70" cy="78" r="4" fill="#754d3c"/>
+    <circle cx="99" cy="78" r="4" fill="#754d3c"/>
+    <circle cx="70" cy="50" r="5" fill="#333"/>
+    <circle cx="99" cy="50" r="5" fill="#333"/>
+
+    <!-- Body -->
+    <rect x="45" y="110" width="80" height="60" rx="6" fill="#1a2433"/>
+
+    <!-- WWW + globe -->
+    <circle cx="85" cy="140" r="16" fill="#1a2433" stroke="#3db4ff" stroke-width="2"/>
+    <text x="85" y="145" font-family="Arial,Helvetica,sans-serif"
+          font-size="12" text-anchor="middle" fill="#d9f2ff">WWW</text>
+
+  </g>
+</svg>
