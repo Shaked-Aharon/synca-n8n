@@ -180,11 +180,11 @@ export const CashcowCreateOrder = {
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
-            displayName: 'Shipping Cost',
-            name: 'shipping_cost',
+            displayName: 'Custom Shipping Id',
+            name: 'CustomShipingId',
             type: 'number',
             default: 0,
-            description: 'Shipping cost',
+            description: 'Custom Shipping Id',
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
@@ -233,6 +233,22 @@ export const CashcowCreateOrder = {
             description: 'Selected shipping method',
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
+        {
+            displayName: 'Shiping Option',
+            name: 'ShipingOption',
+            type: 'string',
+            default: '',
+            description: 'Selected Shiping Option',
+            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
+        },
+        {
+            displayName: 'Is Self Delivery',
+            name: 'IsSelfDelivery',
+            type: 'boolean',
+            default: '',
+            description: 'Selected Is Self Delivery',
+            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
+        },
 
         // Payment Options
         {
@@ -275,7 +291,7 @@ export const CashcowCreateOrder = {
     ],
     process: (params: any, i: number, getNodeParameter: (parameterName: string, itemIndex: number, fallbackValue?: any) => string | number | boolean | object) => {
 
-          // Create the cart object with proper API structure
+        // Create the cart object with proper API structure
         const cart: any = {
             Products: [],
             CustomerFields: {},
@@ -303,14 +319,26 @@ export const CashcowCreateOrder = {
         if (!customerEmail) throw new Error('Customer email is required');
         if (!totalAmount) throw new Error('Total amount is required');
 
+        const customShipingId = getNodeParameter('CustomShipingId', i) as number;
+        if (customShipingId) {
+            cart.CustomShipingId = customShipingId;
+        }
+
+        const isSelfDelivery = getNodeParameter('IsSelfDelivery', i) as boolean;
+        cart.IsSelfDelivery = isSelfDelivery;
+
+        const shipingOption = getNodeParameter('ShipingOption', i) as number;
+        if (shipingOption) {
+            cart.ShipingOption = shipingOption;
+        }
         // Parse customer name into FirstName and LastName
         const nameParts = customerName.trim().split(' ');
         cart.CustomerFields.FirstName = nameParts[0] || '';
         cart.CustomerFields.LastName = nameParts.slice(1).join(' ') || '';
         cart.CustomerFields.Email = customerEmail;
 
-        const is_use_shipping_for_billing =  getNodeParameter('use_shipping_for_billing', i, false) as boolean;
-        if(is_use_shipping_for_billing){
+        const is_use_shipping_for_billing = getNodeParameter('use_shipping_for_billing', i, false) as boolean;
+        if (is_use_shipping_for_billing) {
             cart.CustomerFields.PaymentFirstName = cart.CustomerFields.FirstName;
             cart.CustomerFields.PaymentLastName = cart.CustomerFields.LastName;
         }
@@ -335,12 +363,12 @@ export const CashcowCreateOrder = {
             const shippingAddress = getNodeParameter('shipping_address', i, undefined) as string;
             if (shippingAddress && shippingAddress.trim() !== '') addressParts.push(shippingAddress);
         } catch { }
-        
+
         try {
             const shippingCity = getNodeParameter('shipping_city', i, undefined) as string;
             if (shippingCity && shippingCity.trim() !== '') addressParts.push(shippingCity);
         } catch { }
-        
+
         try {
             const shippingPostalCode = getNodeParameter('shipping_postal_code', i, undefined) as string;
             if (shippingPostalCode && shippingPostalCode.trim() !== '') addressParts.push(shippingPostalCode);
@@ -370,7 +398,7 @@ export const CashcowCreateOrder = {
                     if (!Array.isArray(inputProducts)) {
                         throw new Error('Products must be an array');
                     }
-                    
+
                     // Convert products to API format
                     cart.Products = inputProducts.map((product: any) => ({
                         Title: product.Title || product.title || '',

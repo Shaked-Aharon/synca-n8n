@@ -173,11 +173,11 @@ exports.CashcowCreateOrder = {
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
-            displayName: 'Shipping Cost',
-            name: 'shipping_cost',
+            displayName: 'Custom Shipping Id',
+            name: 'CustomShipingId',
             type: 'number',
             default: 0,
-            description: 'Shipping cost',
+            description: 'Custom Shipping Id',
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
@@ -222,6 +222,22 @@ exports.CashcowCreateOrder = {
             type: 'string',
             default: '',
             description: 'Selected shipping method',
+            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
+        },
+        {
+            displayName: 'Shiping Option',
+            name: 'ShipingOption',
+            type: 'string',
+            default: '',
+            description: 'Selected Shiping Option',
+            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
+        },
+        {
+            displayName: 'Is Self Delivery',
+            name: 'IsSelfDelivery',
+            type: 'boolean',
+            default: '',
+            description: 'Selected Is Self Delivery',
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
@@ -287,6 +303,16 @@ exports.CashcowCreateOrder = {
             throw new Error('Customer email is required');
         if (!totalAmount)
             throw new Error('Total amount is required');
+        const customShipingId = getNodeParameter('CustomShipingId', i);
+        if (customShipingId) {
+            cart.CustomShipingId = customShipingId;
+        }
+        const isSelfDelivery = getNodeParameter('IsSelfDelivery', i);
+        cart.IsSelfDelivery = isSelfDelivery;
+        const shipingOption = getNodeParameter('ShipingOption', i);
+        if (shipingOption) {
+            cart.ShipingOption = shipingOption;
+        }
         const nameParts = customerName.trim().split(' ');
         cart.CustomerFields.FirstName = nameParts[0] || '';
         cart.CustomerFields.LastName = nameParts.slice(1).join(' ') || '';
