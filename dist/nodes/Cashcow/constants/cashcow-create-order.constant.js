@@ -414,7 +414,7 @@ exports.CashcowCreateOrder = {
         try {
             const orderNotes = getNodeParameter('order_notes', i, undefined);
             if (orderNotes && orderNotes.trim() !== '') {
-                cart.CustomerFields.Instroductions = orderNotes;
+                cart.CustomerFields.ExtraField1 = orderNotes;
             }
         }
         catch { }
