@@ -442,8 +442,8 @@ export const CashcowCreateOrder = {
         try {
             const orderNotes = getNodeParameter('order_notes', i, undefined) as string;
             if (orderNotes && orderNotes.trim() !== '') {
-                cart.CustomerFields.ExtraField1 = orderNotes; // Note: API uses "Instroductions" (typo in their API)
-                // cart.CustomerFields.Instroductions = orderNotes; // Note: API uses "Instroductions" (typo in their API)
+                // cart.CustomerFields.ExtraField1 = orderNotes; // Note: API uses "Instroductions" (typo in their API)
+                cart.CustomerFields.Instroductions = orderNotes; // Note: API uses "Instroductions" (typo in their API)
             }
         } catch { }
 
