@@ -46,14 +46,6 @@ exports.CashcowCreateOrder = {
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
-            displayName: 'Shipping City',
-            name: 'shipping_city',
-            type: 'string',
-            default: '',
-            description: 'Shipping city',
-            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
-        },
-        {
             displayName: 'Shipping Postal Code',
             name: 'shipping_postal_code',
             type: 'string',
@@ -209,6 +201,17 @@ exports.CashcowCreateOrder = {
             displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
         },
         {
+            displayName: 'Extra Field',
+            name: 'extra_field',
+            type: 'string',
+            typeOptions: {
+                rows: 3,
+            },
+            default: '',
+            description: 'Customer extra notes for the order',
+            displayOptions: { show: { resource: ['store'], operation: ['create_order'] } },
+        },
+        {
             displayName: 'Coupon Code',
             name: 'coupon_code',
             type: 'string',
@@ -278,7 +281,6 @@ exports.CashcowCreateOrder = {
         },
     ],
     process: (params, i, getNodeParameter) => {
-        var _a;
         const cart = {
             Products: [],
             CustomerFields: {},
@@ -344,13 +346,6 @@ exports.CashcowCreateOrder = {
                 addressParts.push(shippingAddress);
         }
         catch { }
-        let shippingCity;
-        try {
-            shippingCity = getNodeParameter('shipping_city', i, undefined);
-            if (shippingCity && shippingCity.trim() !== '')
-                addressParts.push(shippingCity);
-        }
-        catch { }
         try {
             const shippingPostalCode = getNodeParameter('shipping_postal_code', i, undefined);
             if (shippingPostalCode && shippingPostalCode.trim() !== '')
@@ -359,7 +354,6 @@ exports.CashcowCreateOrder = {
         catch { }
         if (addressParts.length > 0) {
             cart.CustomerFields.Address = addressParts.join(', ');
-            cart.CustomerFields.City = (_a = shippingCity !== null && shippingCity !== void 0 ? shippingCity : cart.CustomerFields.City) !== null && _a !== void 0 ? _a : cart.CustomerFields.Address;
         }
         try {
             const shippingCountry = getNodeParameter('shipping_country', i, undefined);
@@ -417,6 +411,13 @@ exports.CashcowCreateOrder = {
             const orderNotes = getNodeParameter('order_notes', i, undefined);
             if (orderNotes && orderNotes.trim() !== '') {
                 cart.CustomerFields.Instroductions = orderNotes;
+            }
+        }
+        catch { }
+        try {
+            const extraField = getNodeParameter('extra_field', i, undefined);
+            if (extraField && extraField.trim() !== '') {
+                cart.CustomerFields.ExtraField1 = extraField;
             }
         }
         catch { }
