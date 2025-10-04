@@ -278,6 +278,7 @@ exports.CashcowCreateOrder = {
         },
     ],
     process: (params, i, getNodeParameter) => {
+        var _a;
         const cart = {
             Products: [],
             CustomerFields: {},
@@ -343,8 +344,9 @@ exports.CashcowCreateOrder = {
                 addressParts.push(shippingAddress);
         }
         catch { }
+        let shippingCity;
         try {
-            const shippingCity = getNodeParameter('shipping_city', i, undefined);
+            shippingCity = getNodeParameter('shipping_city', i, undefined);
             if (shippingCity && shippingCity.trim() !== '')
                 addressParts.push(shippingCity);
         }
@@ -357,7 +359,7 @@ exports.CashcowCreateOrder = {
         catch { }
         if (addressParts.length > 0) {
             cart.CustomerFields.Address = addressParts.join(', ');
-            cart.CustomerFields.City = cart.CustomerFields.Address;
+            cart.CustomerFields.City = (_a = shippingCity !== null && shippingCity !== void 0 ? shippingCity : cart.CustomerFields.City) !== null && _a !== void 0 ? _a : cart.CustomerFields.Address;
         }
         try {
             const shippingCountry = getNodeParameter('shipping_country', i, undefined);

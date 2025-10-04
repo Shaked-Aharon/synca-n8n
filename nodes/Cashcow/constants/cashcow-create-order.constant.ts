@@ -364,8 +364,9 @@ export const CashcowCreateOrder = {
             if (shippingAddress && shippingAddress.trim() !== '') addressParts.push(shippingAddress);
         } catch { }
 
+        let shippingCity;
         try {
-            const shippingCity = getNodeParameter('shipping_city', i, undefined) as string;
+            shippingCity = getNodeParameter('shipping_city', i, undefined) as string;
             if (shippingCity && shippingCity.trim() !== '') addressParts.push(shippingCity);
         } catch { }
 
@@ -376,7 +377,7 @@ export const CashcowCreateOrder = {
 
         if (addressParts.length > 0) {
             cart.CustomerFields.Address = addressParts.join(', ');
-            cart.CustomerFields.City = cart.CustomerFields.Address;
+            cart.CustomerFields.City = shippingCity ?? cart.CustomerFields.City ?? cart.CustomerFields.Address;
         }
 
         // Country handling
