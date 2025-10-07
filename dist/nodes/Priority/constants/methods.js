@@ -80,7 +80,7 @@ exports.PriorityMethods = {
                     formName = exports.operationToFormName[operation];
                 }
                 console.log({ credentials, credentialsId, operation, formName });
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_subforms`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
                 const options = {
                     method: 'POST',
                     url: url,
@@ -106,7 +106,7 @@ exports.PriorityMethods = {
             try {
                 const credentials = await this.getCredentials('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_forms`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_forms`;
                 const options = {
                     method: 'POST',
                     url: url,
@@ -144,7 +144,7 @@ exports.PriorityMethods = {
                     subFormName = this.getNodeParameter('subFormName');
                 }
                 catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_form_fields`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields`;
                 const options = {
                     method: 'POST',
                     url: url,
@@ -170,7 +170,7 @@ exports.PriorityMethods = {
             try {
                 const credentials = await this.getCredentials('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_procedures`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedures`;
                 const options = {
                     method: 'POST',
                     url: url,
@@ -198,7 +198,7 @@ exports.PriorityMethods = {
             try {
                 const credentials = await this.getCredentials('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_procedure_columns`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedure_columns`;
                 const options = {
                     method: 'POST',
                     url: url,
@@ -256,7 +256,7 @@ exports.PriorityMethods = {
                     subSubFormName = this.getNodeParameter('subSubFormName');
                 }
                 catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_form_fields_for_add`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields_for_add`;
                 const options = {
                     method: 'POST',
                     url: url,

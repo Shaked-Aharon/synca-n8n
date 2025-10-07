@@ -84,7 +84,7 @@ export const PriorityMethods = {
                     formName = operationToFormName[operation];
                 }
                 console.log({ credentials, credentialsId, operation, formName })
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_subforms`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
                     url: url,
@@ -113,7 +113,7 @@ export const PriorityMethods = {
                 const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials') as string;
 
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_forms`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_forms`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
                     url: url,
@@ -159,7 +159,7 @@ export const PriorityMethods = {
                 // try {
                 //     subSubFormName = this.getNodeParameter('subSubFormName') as string;
                 // } catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_form_fields`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields`;
 
                 const options: IHttpRequestOptions = {
                     method: 'POST',
@@ -190,7 +190,7 @@ export const PriorityMethods = {
                 const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials') as string;
 
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_procedures`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedures`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
                     url: url,
@@ -219,7 +219,7 @@ export const PriorityMethods = {
                 const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
                 const credentialsId = this.getNodeParameter('credentials') as string;
 
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_procedure_columns`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedure_columns`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
                     url: url,
@@ -279,7 +279,7 @@ export const PriorityMethods = {
                 } catch (e) { }
 
                 // const subFormName = this.getNodeParameter('subFormName', '') as string;
-                const url = `${credentials.baseUrl}/v1/invoke/${credentialsId}/get_form_fields_for_add`;
+                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields_for_add`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
                     url: url,
