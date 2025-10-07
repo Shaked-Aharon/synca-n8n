@@ -193,12 +193,13 @@ exports.PriorityGeneric = {
             name: 'includeSubforms',
             type: 'multiOptions',
             typeOptions: {
-                loadOptionsMethod: 'getSubforms',
+                loadOptionsMethod: 'getSubForms',
                 loadOptionsDependsOn: ['credentials', 'operation'],
                 refreshOn: ['credentials', 'operation'],
             },
             displayOptions: {
                 show: {
+                    resource: ['generic', 'sales', 'purchaseOrders', 'products'],
                     operation: [
                         'search_form',
                         'get_product', 'list_products',

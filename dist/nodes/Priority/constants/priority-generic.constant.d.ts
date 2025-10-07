@@ -153,29 +153,6 @@ export declare const PriorityGeneric: {
         noDataExpression?: undefined;
         description?: undefined;
         required?: undefined;
-    } | {
-        displayName: string;
-        name: string;
-        type: string;
-        typeOptions: {
-            loadOptionsMethod: string;
-            loadOptionsDependsOn: string[];
-            refreshOn: string[];
-            resourceMapper?: undefined;
-            multipleValues?: undefined;
-        };
-        displayOptions: {
-            show: {
-                operation: string[];
-                resource?: undefined;
-            };
-        };
-        default: never[];
-        description: string;
-        noDataExpression?: undefined;
-        options?: undefined;
-        required?: undefined;
-        placeholder?: undefined;
     })[];
     process: (params: any, i: number, getNodeParameter: (parameterName: string, itemIndex: number, fallbackValue?: any) => string | number | boolean | object) => any;
 };
