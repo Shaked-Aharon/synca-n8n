@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-synca",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "Custom API node for synca using n8n with CRUD operations",
 	"keywords": [
 		"n8n-community-node-package"

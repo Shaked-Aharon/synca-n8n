@@ -156,23 +156,23 @@ export class SyncaPriority implements INodeType {
 				default: '',
 				description: 'number of items to skip',
 			},
-			// {
-			// 	displayName: 'Include Sub-forms',
-			// 	name: 'includeSubforms',
-			// 	type: 'multiOptions',
-			// 	typeOptions: {
-			// 		loadOptionsMethod: 'getSubforms',
-			// 		loadOptionsDependsOn: ['credentials', 'operation'],
-			// 		refreshOn: ['credentials', 'operation'],
-			// 	},
-			// 	displayOptions: {
-			// 		show: {
-			// 			operation: ['get_product', 'get_order', 'get_purchase_order', 'get_invoice', 'get_customer'],
-			// 		},
-			// 	},
-			// 	default: [],
-			// 	description: 'Select which sub-forms to include',
-			// },
+			{
+				displayName: 'Include Sub-forms',
+				name: 'includeSubforms',
+				type: 'multiOptions',
+				typeOptions: {
+					loadOptionsMethod: 'getSubforms',
+					loadOptionsDependsOn: ['credentials', 'operation'],
+					refreshOn: ['credentials', 'operation'],
+				},
+				displayOptions: {
+					show: {
+						operation: ['get_product', 'list_product', 'get_order', 'list_order', 'get_purchase_order', 'list_purchase_order', 'get_invoice', 'list_invoice', 'get_customer', 'list_customer'],
+					},
+				},
+				default: [],
+				description: 'Select which sub-forms to include',
+			},
 		],
 	};
 
@@ -457,6 +457,7 @@ export class SyncaPriority implements INodeType {
 						const param = `${operation.split('_')[1]}Id`
 						requestParams = {
 							id: this.getNodeParameter(param, i),
+							include_subforms: this.getNodeParameter('includeSubforms', i, []),
 							formName: operationToFormName[operation]
 						};
 						// if(operation === 'get_purchase_order') {operation = 'get_row_in_form'}
@@ -545,12 +546,14 @@ export class SyncaPriority implements INodeType {
 							fromval: string;
 						}>;
 						const finalFormName = operation.startsWith('list_') ? operationToFormName[operation] : this.getNodeParameter('formName', i)
+						const isSearchForm = operation == "search_form";
 						if (operation.startsWith('list_')) { operation = 'search_form' }
 						const fields = this.getNodeParameter('fields', 0, []) as string[];
 						requestParams = {
 							formName: finalFormName,
 							limit: this.getNodeParameter('limit', i, 50),
 							skip: this.getNodeParameter('skip', i, 0),
+							include_subforms: isSearchForm ? undefined : this.getNodeParameter('includeSubforms', i, []),
 							fields,
 							filters: filters.map(f => getFinalFilter(f))
 						};
