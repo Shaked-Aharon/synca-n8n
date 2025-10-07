@@ -76,63 +76,6 @@ exports.PriorityProducts = {
             description: 'The product ID to retrieve',
         },
         {
-            displayName: 'Filters',
-            name: 'filters',
-            type: 'fixedCollection',
-            placeholder: 'Add Filter',
-            typeOptions: {
-                multipleValues: true,
-                loadOptionsDependsOn: ['credentials', 'operation'],
-                refreshOn: ['credentials', 'operation'],
-            },
-            default: {},
-            displayOptions: {
-                show: { resource: ['products'], operation: ['list_products'] },
-            },
-            options: [
-                {
-                    name: 'filter',
-                    displayName: 'Filter',
-                    values: [
-                        {
-                            displayName: 'Field',
-                            name: 'field',
-                            type: 'options',
-                            typeOptions: {
-                                loadOptionsMethod: 'getFormFields',
-                                loadOptionsDependsOn: ['credentials', 'operation'],
-                                refreshOn: ['credentials', 'operation']
-                            },
-                            default: '',
-                        },
-                        {
-                            displayName: 'Operator',
-                            name: 'op',
-                            type: 'options',
-                            options: [
-                                { name: 'Equals', value: 'eq' },
-                                { name: 'Not Equals', value: 'neq' },
-                                { name: 'Starts With', value: 'startWith' },
-                                { name: 'Ends With', value: 'endWith' },
-                                { name: 'Contain', value: 'in' },
-                                { name: 'Greater Than', value: 'gt' },
-                                { name: 'Greater or Equal', value: 'gte' },
-                                { name: 'Less Than', value: 'lt' },
-                                { name: 'Less or Equal', value: 'lte' },
-                            ],
-                            default: 'eq',
-                        },
-                        {
-                            displayName: 'Value',
-                            name: 'fromval',
-                            type: 'string',
-                            default: '',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
             displayName: 'Return Fields',
             name: 'fields',
             type: 'multiOptions',

@@ -78,71 +78,71 @@ export const PriorityProducts = {
             default: '',
             description: 'The product ID to retrieve',
         },
-        
+
+        // {
+        //     displayName: 'Filters',
+        //     name: 'filters',
+        //     type: 'fixedCollection',
+        //     placeholder: 'Add Filter',
+        //     typeOptions: {
+        //         multipleValues: true,               // let the user add N rows
+        //         loadOptionsDependsOn: ['credentials', 'operation'],
+        //         refreshOn: ['credentials', 'operation'],       // clear filters when procedure changes (n8n ≥ 1.90)
+        //     },
+        //     default: {},
+        //     displayOptions: {
+        //         show: { resource: ['products'], operation: ['list_products'] },
+        //     },
+
+        //     options: [
+        //         {
+        //             name: 'filter',
+        //             displayName: 'Filter',
+        //             values: [
+        //                 /* 1-A  Field ----------------------------------------- */
+        //                 {
+        //                     displayName: 'Field',
+        //                     name: 'field',
+        //                     type: 'options',
+        //                     typeOptions: {
+        //                         loadOptionsMethod: 'getFormFields',  // see §2
+        //                         loadOptionsDependsOn: ['credentials', 'operation'],
+        //                         refreshOn: ['credentials', 'operation']
+        //                     },
+        //                     default: '',
+        //                 },
+
+        //                 /* 1-B  Operator -------------------------------------- */
+        //                 {
+        //                     displayName: 'Operator',
+        //                     name: 'op',
+        //                     type: 'options',
+        //                     options: [
+        //                         { name: 'Equals', value: 'eq' },
+        //                         { name: 'Not Equals', value: 'neq' },
+        //                         { name: 'Starts With', value: 'startWith' },
+        //                         { name: 'Ends With', value: 'endWith' },
+        //                         { name: 'Contain', value: 'in' },
+        //                         { name: 'Greater Than', value: 'gt' },
+        //                         { name: 'Greater or Equal', value: 'gte' },
+        //                         { name: 'Less Than', value: 'lt' },
+        //                         { name: 'Less or Equal', value: 'lte' },
+        //                     ],
+        //                     default: 'eq',
+        //                 },
+
+        //                 /* 1-C  Value ----------------------------------------- */
+        //                 {
+        //                     displayName: 'Value',
+        //                     name: 'fromval',
+        //                     type: 'string',          // you can switch to ‘number’/‘boolean’ dynamically later
+        //                     default: '',
+        //                 },
+        //             ],
+        //         },
+        //     ],
+        // },
         {
-            displayName: 'Filters',
-            name: 'filters',
-            type: 'fixedCollection',
-            placeholder: 'Add Filter',
-            typeOptions: {
-                multipleValues: true,               // let the user add N rows
-                loadOptionsDependsOn: ['credentials', 'operation'],
-                refreshOn: ['credentials', 'operation'],       // clear filters when procedure changes (n8n ≥ 1.90)
-            },
-            default: {},
-            displayOptions: {
-                show: { resource: ['products'], operation: ['list_products'] },
-            },
-
-            options: [
-                {
-                    name: 'filter',
-                    displayName: 'Filter',
-                    values: [
-                        /* 1-A  Field ----------------------------------------- */
-                        {
-                            displayName: 'Field',
-                            name: 'field',
-                            type: 'options',
-                            typeOptions: {
-                                loadOptionsMethod: 'getFormFields',  // see §2
-                                loadOptionsDependsOn: ['credentials', 'operation'],
-                                refreshOn: ['credentials', 'operation']
-                            },
-                            default: '',
-                        },
-
-                        /* 1-B  Operator -------------------------------------- */
-                        {
-                            displayName: 'Operator',
-                            name: 'op',
-                            type: 'options',
-                            options: [
-                                { name: 'Equals', value: 'eq' },
-                                { name: 'Not Equals', value: 'neq' },
-                                { name: 'Starts With', value: 'startWith' },
-                                { name: 'Ends With', value: 'endWith' },
-                                { name: 'Contain', value: 'in' },
-                                { name: 'Greater Than', value: 'gt' },
-                                { name: 'Greater or Equal', value: 'gte' },
-                                { name: 'Less Than', value: 'lt' },
-                                { name: 'Less or Equal', value: 'lte' },
-                            ],
-                            default: 'eq',
-                        },
-
-                        /* 1-C  Value ----------------------------------------- */
-                        {
-                            displayName: 'Value',
-                            name: 'fromval',
-                            type: 'string',          // you can switch to ‘number’/‘boolean’ dynamically later
-                            default: '',
-                        },
-                    ],
-                },
-            ],
-        },
-          {
             displayName: 'Return Fields',
             name: 'fields',
             type: 'multiOptions',

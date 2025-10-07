@@ -20,7 +20,6 @@ export declare const PriorityProducts: {
         required?: undefined;
         typeOptions?: undefined;
         description?: undefined;
-        placeholder?: undefined;
     } | {
         displayName: string;
         name: string;
@@ -48,13 +47,11 @@ export declare const PriorityProducts: {
                     plural: string;
                 };
             };
-            multipleValues?: undefined;
             loadOptionsMethod?: undefined;
         };
         noDataExpression?: undefined;
         options?: undefined;
         description?: undefined;
-        placeholder?: undefined;
     } | {
         displayName: string;
         name: string;
@@ -71,65 +68,6 @@ export declare const PriorityProducts: {
         noDataExpression?: undefined;
         options?: undefined;
         typeOptions?: undefined;
-        placeholder?: undefined;
-    } | {
-        displayName: string;
-        name: string;
-        type: string;
-        placeholder: string;
-        typeOptions: {
-            multipleValues: boolean;
-            loadOptionsDependsOn: string[];
-            refreshOn: string[];
-            resourceMapper?: undefined;
-            loadOptionsMethod?: undefined;
-        };
-        default: {
-            mappingMode?: undefined;
-            value?: undefined;
-        };
-        displayOptions: {
-            show: {
-                resource: string[];
-                operation: string[];
-            };
-        };
-        options: {
-            name: string;
-            displayName: string;
-            values: ({
-                displayName: string;
-                name: string;
-                type: string;
-                typeOptions: {
-                    loadOptionsMethod: string;
-                    loadOptionsDependsOn: string[];
-                    refreshOn: string[];
-                };
-                default: string;
-                options?: undefined;
-            } | {
-                displayName: string;
-                name: string;
-                type: string;
-                options: {
-                    name: string;
-                    value: string;
-                }[];
-                default: string;
-                typeOptions?: undefined;
-            } | {
-                displayName: string;
-                name: string;
-                type: string;
-                default: string;
-                typeOptions?: undefined;
-                options?: undefined;
-            })[];
-        }[];
-        noDataExpression?: undefined;
-        required?: undefined;
-        description?: undefined;
     } | {
         displayName: string;
         name: string;
@@ -141,7 +79,6 @@ export declare const PriorityProducts: {
             loadOptionsDependsOn: string[];
             refreshOn: string[];
             resourceMapper?: undefined;
-            multipleValues?: undefined;
         };
         displayOptions: {
             show: {
@@ -152,7 +89,6 @@ export declare const PriorityProducts: {
         noDataExpression?: undefined;
         options?: undefined;
         required?: undefined;
-        placeholder?: undefined;
     })[];
     process: (params: any, i: number, getNodeParameter: (parameterName: string, itemIndex: number, fallbackValue?: any) => string | number | boolean | object) => any;
 };

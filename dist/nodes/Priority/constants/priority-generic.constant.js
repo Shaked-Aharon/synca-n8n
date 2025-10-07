@@ -189,6 +189,30 @@ exports.PriorityGeneric = {
             ],
         },
         {
+            displayName: 'Include Sub-forms',
+            name: 'includeSubforms',
+            type: 'multiOptions',
+            typeOptions: {
+                loadOptionsMethod: 'getSubforms',
+                loadOptionsDependsOn: ['credentials', 'operation'],
+                refreshOn: ['credentials', 'operation'],
+            },
+            displayOptions: {
+                show: {
+                    operation: [
+                        'search_form',
+                        'get_product', 'list_products',
+                        'get_order', 'list_orders',
+                        'get_purchase_order', 'list_purchase_orders',
+                        'get_invoice', 'list_invoices',
+                        'get_customer', 'list_customers'
+                    ],
+                },
+            },
+            default: [],
+            description: 'Select which sub-forms to include',
+        },
+        {
             displayName: 'Return Fields',
             name: 'fields',
             type: 'multiOptions',

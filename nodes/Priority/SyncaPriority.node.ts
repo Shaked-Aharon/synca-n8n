@@ -156,23 +156,6 @@ export class SyncaPriority implements INodeType {
 				default: '',
 				description: 'number of items to skip',
 			},
-			{
-				displayName: 'Include Sub-forms',
-				name: 'includeSubforms',
-				type: 'multiOptions',
-				typeOptions: {
-					loadOptionsMethod: 'getSubforms',
-					loadOptionsDependsOn: ['credentials', 'operation'],
-					refreshOn: ['credentials', 'operation'],
-				},
-				displayOptions: {
-					show: {
-						operation: ['get_product', 'list_product', 'get_order', 'list_order', 'get_purchase_order', 'list_purchase_order', 'get_invoice', 'list_invoice', 'get_customer', 'list_customer'],
-					},
-				},
-				default: [],
-				description: 'Select which sub-forms to include',
-			},
 		],
 	};
 
