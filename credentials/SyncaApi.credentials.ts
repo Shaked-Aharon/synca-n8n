@@ -1,5 +1,6 @@
 import {
 	IAuthenticateGeneric,
+	Icon,
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
@@ -7,8 +8,9 @@ import {
 
 export class SyncaApi implements ICredentialType {
 	name = 'customSyncaApiCredentials';
-	displayName = 'Custom API Credentials';
-	documentationUrl = 'https://your-api-docs.com';
+	displayName = 'Synca API Credentials';
+	icon = <Icon>{dark: 'file:icon.svg', light: 'file:icon.svg'};
+	documentationUrl = 'https://synca.co.il';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Token',
@@ -22,7 +24,7 @@ export class SyncaApi implements ICredentialType {
 			description: 'The API token for authentication',
 		},
         {
-        displayName: 'Base URL',
+        displayName: 'Base URL', 
         name: 'baseUrl',
         type: 'string',
         default: 'https://n8n-api.synca.co.il',

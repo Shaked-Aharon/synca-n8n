@@ -4,8 +4,9 @@ exports.SyncaApi = void 0;
 class SyncaApi {
     constructor() {
         this.name = 'customSyncaApiCredentials';
-        this.displayName = 'Custom API Credentials';
-        this.documentationUrl = 'https://your-api-docs.com';
+        this.displayName = 'Synca API Credentials';
+        this.icon = { dark: 'file:icon.svg', light: 'file:icon.svg' };
+        this.documentationUrl = 'https://synca.co.il';
         this.properties = [
             {
                 displayName: 'API Token',
