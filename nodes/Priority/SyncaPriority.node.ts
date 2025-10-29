@@ -7,6 +7,7 @@ import {
 	NodeConnectionType,
 	ResourceMapperField,
 	ResourceMapperValue,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { operationToFormName, PriorityMethods } from './constants/methods';
 import { PriorityProducts } from './constants/priority-products.constant';
@@ -488,6 +489,13 @@ export class SyncaPriority implements INodeType {
 							formFilters: formFilters.map(f => getFinalFilter(f))
 						};
 						if (operation.startsWith('update_')) operation = 'update_row_in_form';
+						if (operation.startsWith('update_') && !requestParams.formFilters || requestParams.formFilters.length === 0) {
+							throw new NodeOperationError(
+								this.getNode(),
+								`At least one filter is required for operation "${operation}"`,
+								{ itemIndex: i }
+							);
+						}
 						else operation = 'add_to_form';
 						break;
 					// case 'get_purchase_order':

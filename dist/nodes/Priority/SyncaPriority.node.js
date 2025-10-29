@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaPriority = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 const methods_1 = require("./constants/methods");
 const priority_products_constant_1 = require("./constants/priority-products.constant");
 const priority_sales_constant_1 = require("./constants/priority-sales.constant");
@@ -199,6 +200,9 @@ class SyncaPriority {
                         };
                         if (operation.startsWith('update_'))
                             operation = 'update_row_in_form';
+                        if (operation.startsWith('update_') && !requestParams.formFilters || requestParams.formFilters.length === 0) {
+                            throw new n8n_workflow_1.NodeOperationError(this.getNode(), `At least one filter is required for operation "${operation}"`, { itemIndex: i });
+                        }
                         else
                             operation = 'add_to_form';
                         break;
