@@ -201,12 +201,12 @@ exports.PriorityGeneric = {
                 show: {
                     resource: ['generic', 'sales', 'purchaseOrders', 'products'],
                     operation: [
-                        'search_form',
-                        'get_product', 'list_products',
-                        'get_order', 'list_orders',
-                        'get_purchase_order', 'list_purchase_orders',
-                        'get_invoice', 'list_invoices',
-                        'get_customer', 'list_customers'
+                        'get_row_in_form',
+                        'get_product',
+                        'get_order',
+                        'get_purchase_order',
+                        'get_invoice',
+                        'get_customer',
                     ],
                 },
             },
