@@ -489,6 +489,8 @@ export class SyncaPriority implements INodeType {
 							formFilters: formFilters.map(f => getFinalFilter(f))
 						};
 						if (operation.startsWith('update_')) operation = 'update_row_in_form';
+						else operation = 'add_to_form';
+
 						if (operation.startsWith('update_') && !requestParams.formFilters || requestParams.formFilters.length === 0) {
 							throw new NodeOperationError(
 								this.getNode(),
@@ -496,7 +498,6 @@ export class SyncaPriority implements INodeType {
 								{ itemIndex: i }
 							);
 						}
-						else operation = 'add_to_form';
 						break;
 					// case 'get_purchase_order':
 					// 	requestParams = {
