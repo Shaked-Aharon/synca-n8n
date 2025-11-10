@@ -491,7 +491,7 @@ export class SyncaPriority implements INodeType {
 						if (operation.startsWith('update_')) operation = 'update_row_in_form';
 						else operation = 'add_to_form';
 
-						if (operation.startsWith('update_') && !requestParams.formFilters || requestParams.formFilters.length === 0) {
+						if (operation.startsWith('update_') && (!requestParams.formFilters || requestParams.formFilters.length === 0)) {
 							throw new NodeOperationError(
 								this.getNode(),
 								`At least one filter is required for operation "${operation}"`,

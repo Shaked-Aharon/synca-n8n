@@ -202,7 +202,7 @@ class SyncaPriority {
                             operation = 'update_row_in_form';
                         else
                             operation = 'add_to_form';
-                        if (operation.startsWith('update_') && !requestParams.formFilters || requestParams.formFilters.length === 0) {
+                        if (operation.startsWith('update_') && (!requestParams.formFilters || requestParams.formFilters.length === 0)) {
                             throw new n8n_workflow_1.NodeOperationError(this.getNode(), `At least one filter is required for operation "${operation}"`, { itemIndex: i });
                         }
                         break;
