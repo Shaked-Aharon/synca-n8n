@@ -29,4 +29,9 @@
 		"nodes/**/*.json",
 		"package.json",
 	],
+	"exclude": [
+		"nodes/OLD_*",
+		"nodes/Mirakl/*",
+		"nodes/shared/**/*",
+	]
 }

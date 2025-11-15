@@ -213,7 +213,6 @@ class SyncaPriority {
                         break;
                     case 'run_procedures':
                         const parameters = this.getNodeParameter('fields', 0, {});
-                        console.log({ parameters });
                         requestParams = {
                             procedure_name: this.getNodeParameter('procedureName', i),
                             parameters: parameters.value

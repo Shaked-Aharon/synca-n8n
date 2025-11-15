@@ -8,8 +8,8 @@
     "license": "MIT",
     "homepage": "",
     "author": {
-        "name": "",
-        "email": ""
+        "name": "Synca Software Solutions",
+        "email": "info@synca.co.il"
     },
     "repository": {
         "type": "git",
@@ -20,7 +20,7 @@
     },
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsc && gulp build:icons",
+        "build": "tsc && gulp build:icons && gulp build:move",
         "dev": "tsc --watch",
         "format": "prettier nodes credentials --write",
         "lint": "eslint nodes credentials package.json",

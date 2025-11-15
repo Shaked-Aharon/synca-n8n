@@ -24,7 +24,7 @@ export const operationToFormName: Record<string, string> = {
 }
 
 /* Helper that translates your form engine types to n8n types */
-function mapType(t: string): 'string' | 'number' | 'dateTime' | 'date' | 'time' | 'boolean' {
+function mapType(t: string): 'string' | 'number' | 'dateTime' | 'time' | 'boolean' {
     switch (t) {
         case 'duration':
         case 'int':
@@ -293,9 +293,9 @@ export const PriorityMethods = {
                     return { fields: [], emptyFieldsNotice: response.error.message }
                 }
                 if (Array.isArray(response.data)) {
-                    const result = {
+                    const result: ResourceMapperFields = {
                         fields: response.data.map((f: any) => {
-                            const temp = {
+                            const temp: ResourceMapperField = {
                                 id: f.id,                   // database column
                                 displayName: f.name || f.key,
                                 type: f.choices ? 'options' : mapType(f.type),        // 'string' | 'number' | 'dateTime' | …
