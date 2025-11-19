@@ -1,12 +1,12 @@
 {
     "name": "n8n-nodes-synca",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "Custom API node for synca using n8n with CRUD operations",
     "keywords": [
         "n8n-community-node-package"
     ],
     "license": "MIT",
-    "homepage": "",
+    "homepage": "https://n8n.synca.co.il",
     "author": {
         "name": "Synca Software Solutions",
         "email": "info@synca.co.il"

@@ -146,7 +146,7 @@ export const PriorityGeneric = {
             displayOptions: {
                 show: {
                     resource: ['generic', 'sales', 'purchaseOrders', 'products'], operation: [
-                        'search_form', 'update_row_in_form', 'update_row_in_sub_form',
+                        'search_form', 'update_row_in_form', 'search_sub_form', 'update_row_in_sub_form',
                         'list_products', 'update_product',
                         'list_customers', 'update_customer',
                         'list_orders', 'update_order',
