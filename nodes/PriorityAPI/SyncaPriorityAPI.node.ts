@@ -9,16 +9,16 @@ import {
     NodeConnectionType,
 } from 'n8n-workflow';
 
-export class SyncaPriority implements INodeType {
+export class SyncaPriorityAPI implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Synca Priority',
-		name: 'customSyncaPriority',
+		displayName: 'Synca Priority ERP API',
+		name: 'customSyncaPriorityAPI',
 		icon: 'fa:api',
 		group: ['transform'],
 		version: 1,
 		description: 'Interact with Custom API for Orders, Items, Customers, and Purchase Orders',
 		defaults: {
-			name: 'Synca Priority',
+			name: 'Synca Priority ERP API',
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
@@ -214,14 +214,14 @@ export class SyncaPriority implements INodeType {
 						name: 'top',
 						type: 'number',
 						default: 100,
-						description: 'Number of records to return from the top',
+						description: 'Number of records to return',
 					},
 					{
-						displayName: 'Limit',
-						name: 'limit',
+						displayName: 'Skip',
+						name: 'skip',
 						type: 'number',
 						default: 50,
-						description: 'Maximum number of records to return',
+						description: 'The amount of record to skip',
 					},
 					{
 						displayName: 'Filter',
@@ -345,8 +345,8 @@ export class SyncaPriority implements INodeType {
 				if (additionalFields.top !== undefined) {
 					queryParams.top = additionalFields.top.toString();
 				}
-				if (additionalFields.limit !== undefined) {
-					queryParams.limit = additionalFields.limit.toString();
+				if (additionalFields.skip !== undefined) {
+					queryParams.skip = additionalFields.skip.toString();
 				}
 				if (additionalFields.filter) {
 					queryParams.filter = additionalFields.filter;
@@ -363,23 +363,25 @@ export class SyncaPriority implements INodeType {
 
 				// Add data to query params for create and update operations
 				if (operation === 'create' || operation === 'update') {
-					const data = this.getNodeParameter('data', i) as string;
+					let data = this.getNodeParameter('data', i) as string;
+					if(data) {data = JSON.parse(data);}
 					queryParams.data = data;
 				}
 
 				// Build URL
 				const baseUrl = `${baseURL}/v1/invoke/${credentialsId}/${actionName}`;
-				const queryString = new URLSearchParams(queryParams).toString();
-				const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+				// const queryString = new URLSearchParams(queryParams).toString();
+				// const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
 				// Make HTTP request
 				const options: IHttpRequestOptions = {
 					method: 'POST',
-					url,
+					url: baseUrl,
 					headers: {
 						'x-api-token': apiToken,
 						'Content-Type': 'application/json',
 					},
+					body: queryParams
 				};
 
 				console.log({executeOptions: options})
