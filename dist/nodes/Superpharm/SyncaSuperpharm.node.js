@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaSuperpharm = void 0;
 function addResourceSpecificParams(requestParams, resource, operation, itemIndex, getNodeParameter) {
-    const idFields = ['order_id', 'offer_id', 'return_id', 'tracking_id', 'thread_id'];
+    const idFields = ['order_id', 'offer_id', 'return_id', 'tracking_id', 'thread_id', 'documentType', 'documentUrl', 'carrier_code', 'carrier_name', 'carrier_standard_code', 'tracking_number', 'carrier_url'];
     for (const field of idFields) {
         try {
             const value = getNodeParameter(field, itemIndex, '');
@@ -216,6 +216,18 @@ class SyncaSuperpharm {
                             value: 'update_order_status',
                             action: 'Update order status',
                             description: 'Update the status of order lines',
+                        },
+                        {
+                            name: 'Attach Documents To Order',
+                            value: 'attach_document_to_order',
+                            action: 'Attach documents to order',
+                            description: 'Attach documents to an order by file or URL',
+                        },
+                        {
+                            name: 'Update Order Tracking',
+                            value: 'update_order_tracking',
+                            action: 'Update Order Tracking',
+                            description: 'Update the tracking information of an order',
                         },
                         {
                             name: 'Export Orders',
@@ -467,11 +479,116 @@ class SyncaSuperpharm {
                     displayOptions: {
                         show: {
                             resource: ['orders'],
-                            operation: ['get_order', 'accept_order', 'cancel_order', 'refund_order', 'ship_order'],
+                            operation: ['get_order', 'accept_order', 'cancel_order', 'refund_order', 'ship_order', 'attach_document_to_order'],
                         },
                     },
                     description: 'The unique identifier of the order',
                     placeholder: 'ORD-12345-A',
+                },
+                {
+                    displayName: 'Document Type',
+                    name: 'documentType',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['attach_document_to_order'],
+                        },
+                    },
+                    description: 'Type of document being attached',
+                    placeholder: 'CUSTOMER_INVOICE',
+                },
+                {
+                    displayName: 'Document URL',
+                    name: 'documentUrl',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['attach_document_to_order'],
+                        },
+                    },
+                    description: 'URL of the document to attach',
+                    placeholder: 'https://example.com/document.pdf',
+                },
+                {
+                    displayName: 'Carrier Code',
+                    name: 'carrier_code',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['update_order_tracking'],
+                        },
+                    },
+                    description: 'Order tracking carrier code',
+                    placeholder: 'UPS',
+                },
+                {
+                    displayName: 'Carrier Name',
+                    name: 'carrier_name',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['update_order_tracking'],
+                        },
+                    },
+                    description: 'Order tracking carrier name',
+                    placeholder: 'UPS',
+                },
+                {
+                    displayName: 'Carrier Standard Code',
+                    name: 'carrier_standard_code',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['update_order_tracking'],
+                        },
+                    },
+                    description: 'Order tracking carrier standard code',
+                    placeholder: 'UPS',
+                },
+                {
+                    displayName: 'Tracking Number',
+                    name: 'tracking_number',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['update_order_tracking'],
+                        },
+                    },
+                    description: 'Order tracking tracking number',
+                    placeholder: '1Z999AA1234567890',
+                },
+                {
+                    displayName: 'Carrier URL',
+                    name: 'carrier_url',
+                    type: 'string',
+                    default: '',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: ['orders'],
+                            operation: ['update_order_tracking'],
+                        },
+                    },
+                    description: 'Order tracking tracking URL',
+                    placeholder: 'https://example.com/tracking',
                 },
                 {
                     displayName: 'Offer ID',
