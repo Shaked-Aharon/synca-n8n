@@ -751,7 +751,7 @@ export class SyncaWolt implements INodeType {
 			try {
 				const credentialId = this.getNodeParameter('credentials', i) as string;
 				const operation = this.getNodeParameter('operation', i) as string;
-				const resource = this.getNodeParameter('resource', i) as string;
+				// const resource = this.getNodeParameter('resource', i) as string;
 
 				/* Gather all user-supplied params */
 				let params: Record<string, any> = {};
