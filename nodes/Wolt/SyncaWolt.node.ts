@@ -23,6 +23,7 @@ export class SyncaWolt implements INodeType {
 		group: ['transform'],
 		version: 1,
 		description: 'Invoke Wolt actions via the Synca backend - Orders, Venue, Menu, and Timeslots management',
+		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		defaults: { name: 'Synca Wolt' },
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],

@@ -11,6 +11,7 @@ class SyncaWolt {
             group: ['transform'],
             version: 1,
             description: 'Invoke Wolt actions via the Synca backend - Orders, Venue, Menu, and Timeslots management',
+            subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
             defaults: { name: 'Synca Wolt' },
             inputs: ["main"],
             outputs: ["main"],

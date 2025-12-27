@@ -1,6 +1,6 @@
 {
     "name": "n8n-nodes-synca",
-    "version": "1.0.21",
+    "version": "1.0.22",
     "description": "Custom API node for synca using n8n with CRUD operations",
     "keywords": [
         "n8n-community-node-package"
@@ -40,7 +40,8 @@
             "dist/nodes/Cashcow/SyncaCashcow.node.js",
             "dist/nodes/Priority/SyncaPriority.node.js",
             "dist/nodes/Superpharm/SyncaSuperpharm.node.js",
-            "dist/nodes/Wolt/SyncaWolt.node.js"
+            "dist/nodes/Wolt/SyncaWolt.node.js",
+            "dist/nodes/Wolt/SyncaWoltTrigger.node.js"
         ]
     },
     "devDependencies": {
