@@ -9,7 +9,7 @@ class SyncaWoltTrigger {
             icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
             group: ['trigger'],
             version: 1,
-            subtitle: '={{$parameter["events"].length == 0 ? "All events" : $parameter["events"].map(e => e.replace("order.notification.", "")).join(", ")}}',
+            subtitle: '={{$parameter["eventFilter"].length == 0 ? "All events" : $parameter["eventFilter"].map(e => e.replace("order.notification.", "")).join(", ")}}',
             description: 'Starts the workflow when a Synca event occurs',
             defaults: {
                 name: 'Synca Wolt Trigger',
@@ -41,8 +41,8 @@ class SyncaWoltTrigger {
                     description: 'Select the Wolt credentials to listen to',
                 },
                 {
-                    displayName: 'Events',
-                    name: 'events',
+                    displayName: 'Event Filter',
+                    name: 'eventFilter',
                     type: 'multiOptions',
                     options: [
                         {
@@ -119,7 +119,7 @@ class SyncaWoltTrigger {
                 },
                 async create() {
                     const credentialId = this.getNodeParameter('credentials');
-                    const events = this.getNodeParameter('events');
+                    const events = this.getNodeParameter('eventFilter');
                     const webhookUrl = this.getNodeWebhookUrl('default');
                     const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
                     const endpoint = `${baseUrl}/v1/n8n/triggers/register`;

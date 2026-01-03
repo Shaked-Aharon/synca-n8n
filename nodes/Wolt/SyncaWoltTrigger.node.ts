@@ -22,7 +22,7 @@ export class SyncaWoltTrigger implements INodeType {
         icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
         group: ['trigger'],
         version: 1,
-        subtitle: '={{$parameter["events"].length == 0 ? "All events" : $parameter["events"].map(e => e.replace("order.notification.", "")).join(", ")}}',
+        subtitle: '={{$parameter["eventFilter"].length == 0 ? "All events" : $parameter["eventFilter"].map(e => e.replace("order.notification.", "")).join(", ")}}',
         description: 'Starts the workflow when a Synca event occurs',
         defaults: {
             name: 'Synca Wolt Trigger',
@@ -57,8 +57,8 @@ export class SyncaWoltTrigger implements INodeType {
                 description: 'Select the Wolt credentials to listen to',
             },
             {
-                displayName: 'Events',
-                name: 'events',
+                displayName: 'Event Filter',
+                name: 'eventFilter',
                 type: 'multiOptions',
                 options: [
                     {
@@ -137,7 +137,7 @@ export class SyncaWoltTrigger implements INodeType {
             },
             async create(this: IHookFunctions): Promise<boolean> {
                 const credentialId = this.getNodeParameter('credentials') as string;
-                const events = this.getNodeParameter('events') as string[];
+                const events = this.getNodeParameter('eventFilter') as string[];
                 const webhookUrl = this.getNodeWebhookUrl('default');
 
                 const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');

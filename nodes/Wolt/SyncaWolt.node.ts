@@ -56,21 +56,21 @@ export class SyncaWolt implements INodeType {
 						value: 'orders',
 						description: 'Manage orders, refunds, tracking, and cancellations',
 					},
-					{
-						name: 'Venue',
-						value: 'venue',
-						description: 'Manage venue status, delivery provider, and opening times',
-					},
+					// {
+					// 	name: 'Venue',
+					// 	value: 'venue',
+					// 	description: 'Manage venue status, delivery provider, and opening times',
+					// },
 					{
 						name: 'Menu',
 						value: 'menu',
 						description: 'Manage menu items, inventory, and options',
 					},
-					{
-						name: 'Timeslots',
-						value: 'timeslots',
-						description: 'Manage delivery timeslot configurations',
-					},
+					// {
+					// 	name: 'Timeslots',
+					// 	value: 'timeslots',
+					// 	description: 'Manage delivery timeslot configurations',
+					// },
 				],
 				default: 'orders',
 			},
@@ -115,46 +115,46 @@ export class SyncaWolt implements INodeType {
 						value: 'get_order',
 						description: 'Retrieve detailed order information',
 					},
-					{
-						name: 'Mark Order Sent to POS',
-						value: 'mark_order_sent_to_pos',
-						description: 'Mark order as sent to POS system',
-					},
-					{
-						name: 'Replace Order Items',
-						value: 'replace_order_items',
-						description: 'Replace items in order during picking',
-					},
-					{
-						name: 'Refund Order Items',
-						value: 'refund_order_items',
-						description: 'Refund specific items (requires endpoint enablement)',
-					},
-					{
-						name: 'Refund Order Basket',
-						value: 'refund_order_basket',
-						description: 'Refund at basket level (requires endpoint enablement)',
-					},
-					{
-						name: 'Update Courier Location',
-						value: 'update_courier_location',
-						description: 'Send courier location (Self Delivery only)',
-					},
-					{
-						name: 'Update Delivery ETA',
-						value: 'update_delivery_eta',
-						description: 'Send estimated time of arrival (Self Delivery only)',
-					},
-					{
-						name: 'Get Document Upload Link',
-						value: 'get_document_upload_link',
-						description: 'Get pre-signed URL for uploading order documents',
-					},
-					{
-						name: 'Cancel Order',
-						value: 'cancel_order',
-						description: 'Cancel order before courier accepts delivery task',
-					},
+					// {
+					// 	name: 'Mark Order Sent to POS',
+					// 	value: 'mark_order_sent_to_pos',
+					// 	description: 'Mark order as sent to POS system',
+					// },
+					// {
+					// 	name: 'Replace Order Items',
+					// 	value: 'replace_order_items',
+					// 	description: 'Replace items in order during picking',
+					// },
+					// {
+					// 	name: 'Refund Order Items',
+					// 	value: 'refund_order_items',
+					// 	description: 'Refund specific items (requires endpoint enablement)',
+					// },
+					// {
+					// 	name: 'Refund Order Basket',
+					// 	value: 'refund_order_basket',
+					// 	description: 'Refund at basket level (requires endpoint enablement)',
+					// },
+					// {
+					// 	name: 'Update Courier Location',
+					// 	value: 'update_courier_location',
+					// 	description: 'Send courier location (Self Delivery only)',
+					// },
+					// {
+					// 	name: 'Update Delivery ETA',
+					// 	value: 'update_delivery_eta',
+					// 	description: 'Send estimated time of arrival (Self Delivery only)',
+					// },
+					// {
+					// 	name: 'Get Document Upload Link',
+					// 	value: 'get_document_upload_link',
+					// 	description: 'Get pre-signed URL for uploading order documents',
+					// },
+					// {
+					// 	name: 'Cancel Order',
+					// 	value: 'cancel_order',
+					// 	description: 'Cancel order before courier accepts delivery task',
+					// },
 				],
 				default: 'get_order',
 			},
@@ -162,46 +162,46 @@ export class SyncaWolt implements INodeType {
 			/* ------------------------------------------------------------ */
 			/* VENUE OPERATIONS                                             */
 			/* ------------------------------------------------------------ */
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: { show: { resource: ['venue'] } },
-				options: [
-					{
-						name: 'Get Venue Status',
-						value: 'get_venue_status',
-						description: 'Get venue status information',
-					},
-					{
-						name: 'Get Delivery Provider',
-						value: 'get_delivery_provider',
-						description: 'Get delivery provider configuration',
-					},
-					{
-						name: 'Update Delivery Provider',
-						value: 'update_delivery_provider',
-						description: 'Update delivery provider configuration',
-					},
-					{
-						name: 'Update Venue Online Status',
-						value: 'update_venue_online_status',
-						description: 'Update venue online/offline status',
-					},
-					{
-						name: 'Update Venue Opening Time',
-						value: 'update_venue_opening_time',
-						description: 'Update venue opening hours',
-					},
-					{
-						name: 'Set Special Opening Time',
-						value: 'set_special_opening_time',
-						description: 'Set special opening time (e.g., holidays)',
-					},
-				],
-				default: 'get_venue_status',
-			},
+			// {
+			// 	displayName: 'Operation',
+			// 	name: 'operation',
+			// 	type: 'options',
+			// 	noDataExpression: true,
+			// 	displayOptions: { show: { resource: ['venue'] } },
+			// 	options: [
+			// 		{
+			// 			name: 'Get Venue Status',
+			// 			value: 'get_venue_status',
+			// 			description: 'Get venue status information',
+			// 		},
+			// 		{
+			// 			name: 'Get Delivery Provider',
+			// 			value: 'get_delivery_provider',
+			// 			description: 'Get delivery provider configuration',
+			// 		},
+			// 		{
+			// 			name: 'Update Delivery Provider',
+			// 			value: 'update_delivery_provider',
+			// 			description: 'Update delivery provider configuration',
+			// 		},
+			// 		{
+			// 			name: 'Update Venue Online Status',
+			// 			value: 'update_venue_online_status',
+			// 			description: 'Update venue online/offline status',
+			// 		},
+			// 		{
+			// 			name: 'Update Venue Opening Time',
+			// 			value: 'update_venue_opening_time',
+			// 			description: 'Update venue opening hours',
+			// 		},
+			// 		{
+			// 			name: 'Set Special Opening Time',
+			// 			value: 'set_special_opening_time',
+			// 			description: 'Set special opening time (e.g., holidays)',
+			// 		},
+			// 	],
+			// 	default: 'get_venue_status',
+			// },
 
 			/* ------------------------------------------------------------ */
 			/* MENU OPERATIONS                                              */
@@ -213,16 +213,16 @@ export class SyncaWolt implements INodeType {
 				noDataExpression: true,
 				displayOptions: { show: { resource: ['menu'] } },
 				options: [
-					{
-						name: 'Get Menu',
-						value: 'get_menu',
-						description: 'Retrieve venue menu',
-					},
-					{
-						name: 'Create or Update Menu',
-						value: 'create_or_update_menu',
-						description: 'Create or update entire menu',
-					},
+					// {
+					// 	name: 'Get Menu',
+					// 	value: 'get_menu',
+					// 	description: 'Retrieve venue menu',
+					// },
+					// {
+					// 	name: 'Create or Update Menu',
+					// 	value: 'create_or_update_menu',
+					// 	description: 'Create or update entire menu',
+					// },
 					{
 						name: 'Update Item Inventory',
 						value: 'update_item_inventory',
@@ -245,26 +245,26 @@ export class SyncaWolt implements INodeType {
 			/* ------------------------------------------------------------ */
 			/* TIMESLOTS OPERATIONS                                         */
 			/* ------------------------------------------------------------ */
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: { show: { resource: ['timeslots'] } },
-				options: [
-					{
-						name: 'Get Timeslots',
-						value: 'get_timeslots',
-						description: 'Retrieve timeslot configurations for next 7 days',
-					},
-					{
-						name: 'Update Timeslots',
-						value: 'update_timeslots',
-						description: 'Update timeslot configurations',
-					},
-				],
-				default: 'get_timeslots',
-			},
+			// {
+			// 	displayName: 'Operation',
+			// 	name: 'operation',
+			// 	type: 'options',
+			// 	noDataExpression: true,
+			// 	displayOptions: { show: { resource: ['timeslots'] } },
+			// 	options: [
+			// 		{
+			// 			name: 'Get Timeslots',
+			// 			value: 'get_timeslots',
+			// 			description: 'Retrieve timeslot configurations for next 7 days',
+			// 		},
+			// 		{
+			// 			name: 'Update Timeslots',
+			// 			value: 'update_timeslots',
+			// 			description: 'Update timeslot configurations',
+			// 		},
+			// 	],
+			// 	default: 'get_timeslots',
+			// },
 
 			/* ------------------------------------------------------------ */
 			/* ORDER PARAMETERS                                             */
@@ -615,26 +615,54 @@ export class SyncaWolt implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['menu'],
-						operation: ['update_item_inventory', 'update_item', 'update_option_value'],
+						operation: ['update_item', 'update_option_value'],
 					},
 				},
 				description: 'The unique identifier of the menu item',
 			},
 			{
-				displayName: 'Inventory',
-				name: 'inventory',
-				type: 'json',
+				displayName: 'Item SKU',
+				name: 'item_sku',
+				type: 'string',
 				required: true,
-				default: '{}',
+				default: '',
 				displayOptions: {
 					show: {
 						resource: ['menu'],
 						operation: ['update_item_inventory'],
 					},
 				},
-				description: 'JSON object with inventory/availability data',
-				placeholder: '{"available": true, "quantity": 10}',
+				description: 'The SKU of the menu item',
 			},
+			{
+				displayName: 'Item Quantity',
+				name: 'item_quantity',
+				type: 'number',
+				required: true,
+				default: 0,
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item_inventory'],
+					},
+				},
+				description: 'The quantity of the menu item',
+			},
+			// {
+			// 	displayName: 'Inventory',
+			// 	name: 'inventory',
+			// 	type: 'json',
+			// 	required: true,
+			// 	default: '{}',
+			// 	displayOptions: {
+			// 		show: {
+			// 			resource: ['menu'],
+			// 			operation: ['update_item_inventory'],
+			// 		},
+			// 	},
+			// 	description: 'JSON object with inventory/availability data',
+			// 	placeholder: '{"available": true, "quantity": 10}',
+			// },
 			{
 				displayName: 'Item',
 				name: 'item',
@@ -984,6 +1012,26 @@ export class SyncaWolt implements INodeType {
 					const itemId = this.getNodeParameter('item_id', i, undefined) as string;
 					if (itemId !== undefined && itemId !== '') {
 						params.item_id = itemId;
+					}
+				} catch {
+					// Field not present, skip
+				}
+
+				// Handle item_sku parameter
+				try {
+					const itemSku = this.getNodeParameter('item_sku', i, undefined) as string;
+					if (itemSku !== undefined && itemSku !== '') {
+						params.item_sku = itemSku;
+					}
+				} catch {
+					// Field not present, skip
+				}
+
+				// Handle item_quantity parameter
+				try {
+					const itemQuantity = this.getNodeParameter('item_quantity', i, undefined) as string;
+					if (itemQuantity !== undefined && itemQuantity !== '') {
+						params.item_quantity = itemQuantity;
 					}
 				} catch {
 					// Field not present, skip
