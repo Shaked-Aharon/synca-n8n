@@ -117,6 +117,7 @@ export class SyncaSuperpharm implements INodeType {
 		name: 'customSyncaSuperpharm',
 		icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
 		group: ['transform'],
+		documentationUrl: 'https://n8n.synca.co.il/docs',
 		version: 1,
 		description: 'Comprehensive Superpharm Marketplace API integration for Orders, Offers, Products, Inventory, Messages, Shipping, and more',
 		defaults: {
@@ -1163,18 +1164,18 @@ export class SyncaSuperpharm implements INodeType {
 				// Add resource-specific parameters
 				addResourceSpecificParams(requestParams, resource, operation, i, this.getNodeParameter as any);
 				// if (operation === 'attach_document_to_order') {
-					
-					// if (documentSource === 'file') {
-					// 	const binaryPropertyName = this.getNodeParameter('documentFile', i) as string;
-					// 	const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
-						
-					// 	// Add binary data to request
-					// 	requestParams.documentFile = {
-					// 		filename: binaryData.fileName,
-					// 		mimeType: binaryData.mimeType,
-					// 		data: binaryData.data, // base64 encoded data
-					// 	};
-					// }
+
+				// if (documentSource === 'file') {
+				// 	const binaryPropertyName = this.getNodeParameter('documentFile', i) as string;
+				// 	const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
+
+				// 	// Add binary data to request
+				// 	requestParams.documentFile = {
+				// 		filename: binaryData.fileName,
+				// 		mimeType: binaryData.mimeType,
+				// 		data: binaryData.data, // base64 encoded data
+				// 	};
+				// }
 				// }
 				// Build headers
 				const headers: Record<string, string> = {

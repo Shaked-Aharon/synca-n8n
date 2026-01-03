@@ -58,6 +58,7 @@ export class SyncaPriority implements INodeType {
 		name: 'customNewSyncaPriority',
 		icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
 		group: ['transform'],
+		documentationUrl: 'https://n8n.synca.co.il/docs',
 		version: 1,
 		description: 'Interact with Priority ERP for Products, Sales, Purchase Orders, Agents, and Procedures',
 		defaults: {

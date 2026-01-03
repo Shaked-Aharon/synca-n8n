@@ -9,8 +9,8 @@ import {
 export class SyncaApi implements ICredentialType {
 	name = 'customSyncaApiCredentials';
 	displayName = 'Synca API Credentials';
-	icon = <Icon>{dark: 'file:icon.svg', light: 'file:icon.svg'};
-	documentationUrl = 'https://synca.co.il';
+	icon = <Icon>{ dark: 'file:icon.svg', light: 'file:icon.svg' };
+	documentationUrl = 'https://n8n.synca.co.il/docs';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Token',
@@ -23,13 +23,13 @@ export class SyncaApi implements ICredentialType {
 			required: true,
 			description: 'The API token for authentication',
 		},
-        {
-        displayName: 'Base URL', 
-        name: 'baseUrl',
-        type: 'string',
-        default: 'https://n8n-api.synca.co.il',
-        description: 'Base URL of your Synca instance',
-      },
+		{
+			displayName: 'Base URL',
+			name: 'baseUrl',
+			type: 'string',
+			default: 'https://n8n-api.synca.co.il',
+			description: 'Base URL of your Synca instance',
+		},
 	];
 
 	// Optional: Add authentication method
@@ -42,15 +42,15 @@ export class SyncaApi implements ICredentialType {
 		},
 	};
 
-    test: ICredentialTestRequest = {
-      request: {
-		skipSslCertificateValidation: true,
-        headers: {
-          'X-API-Token': '={{$credentials.apiToken}}',
-        },
-        baseURL: '={{$credentials.baseUrl}}',
-        url: '/v1/invoke/health-check',
-        method: 'GET',
-      },
-    };
+	test: ICredentialTestRequest = {
+		request: {
+			skipSslCertificateValidation: true,
+			headers: {
+				'X-API-Token': '={{$credentials.apiToken}}',
+			},
+			baseURL: '={{$credentials.baseUrl}}',
+			url: '/v1/invoke/health-check',
+			method: 'GET',
+		},
+	};
 }
