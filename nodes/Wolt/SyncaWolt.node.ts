@@ -615,10 +615,113 @@ export class SyncaWolt implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['menu'],
-						operation: ['update_item', 'update_option_value'],
+						operation: ['update_option_value'],
 					},
 				},
 				description: 'The unique identifier of the menu item',
+			},
+			{
+				displayName: 'Item Identifier Type',
+				name: 'item_identifier_type',
+				type: 'options',
+				required: true,
+				default: 'external_id',
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item'],
+					},
+				},
+				options: [
+					{ name: 'External ID', value: 'external_id' },
+					{ name: 'GTIN', value: 'gtin' },
+					{ name: 'SKU', value: 'sku' },
+				],
+				description: 'Type of identifier to use for the item',
+			},
+			{
+				displayName: 'Identifier Value',
+				name: 'item_identifier_value',
+				type: 'string',
+				required: true,
+				default: '',
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item'],
+					},
+				},
+				description: 'Value of the chosen identifier',
+			},
+			{
+				displayName: 'Price',
+				name: 'price',
+				type: 'number',
+				required: false,
+				default: 0,
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item', 'update_option_value'],
+					},
+				},
+				description: 'New price for the item or option value',
+			},
+			{
+				displayName: 'Discounted Price',
+				name: 'discounted_price',
+				type: 'number',
+				required: false,
+				default: 0,
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item'],
+					},
+				},
+				description: 'New discounted price for the item',
+			},
+			{
+				displayName: 'Enabled',
+				name: 'enabled',
+				type: 'boolean',
+				required: false,
+				default: true,
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item', 'update_option_value'],
+					},
+				},
+				description: 'Whether the item/option is enabled',
+			},
+			{
+				displayName: 'Disabled Until',
+				name: 'disabled_until',
+				type: 'dateTime',
+				required: false,
+				default: '',
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item'],
+					},
+				},
+				description: 'Automatically re-enable item at this time',
+			},
+			{
+				displayName: 'In Stock',
+				name: 'in_stock',
+				type: 'boolean',
+				required: false,
+				default: true,
+				displayOptions: {
+					show: {
+						resource: ['menu'],
+						operation: ['update_item'],
+					},
+				},
+				description: 'Whether the item is in stock',
 			},
 			{
 				displayName: 'Item SKU',
@@ -663,21 +766,21 @@ export class SyncaWolt implements INodeType {
 			// 	description: 'JSON object with inventory/availability data',
 			// 	placeholder: '{"available": true, "quantity": 10}',
 			// },
-			{
-				displayName: 'Item',
-				name: 'item',
-				type: 'json',
-				required: true,
-				default: '{}',
-				displayOptions: {
-					show: {
-						resource: ['menu'],
-						operation: ['update_item'],
-					},
-				},
-				description: 'JSON object with item details to update',
-				placeholder: '{"name": "Pizza", "price": 12.99}',
-			},
+			// {
+			// 	displayName: 'Item',
+			// 	name: 'item',
+			// 	type: 'json',
+			// 	required: true,
+			// 	default: '{}',
+			// 	displayOptions: {
+			// 		show: {
+			// 			resource: ['menu'],
+			// 			operation: ['update_item'],
+			// 		},
+			// 	},
+			// 	description: 'JSON object with item details to update',
+			// 	placeholder: '{"name": "Pizza", "price": 12.99}',
+			// },
 			{
 				displayName: 'Option ID',
 				name: 'option_id',
@@ -692,21 +795,22 @@ export class SyncaWolt implements INodeType {
 				},
 				description: 'The unique identifier of the option',
 			},
-			{
-				displayName: 'Option Value',
-				name: 'option_value',
-				type: 'json',
-				required: true,
-				default: '{}',
-				displayOptions: {
-					show: {
-						resource: ['menu'],
-						operation: ['update_option_value'],
-					},
-				},
-				description: 'JSON object with option value to update',
-				placeholder: '{"price": 2.50, "available": true}',
-			},
+
+			// {
+			// 	displayName: 'Option Value',
+			// 	name: 'option_value',
+			// 	type: 'json',
+			// 	required: true,
+			// 	default: '{}',
+			// 	displayOptions: {
+			// 		show: {
+			// 			resource: ['menu'],
+			// 			operation: ['update_option_value'],
+			// 		},
+			// 	},
+			// 	description: 'JSON object with option value to update',
+			// 	placeholder: '{"price": 2.50, "available": true}',
+			// },
 
 			/* ------------------------------------------------------------ */
 			/* TIMESLOTS PARAMETERS                                         */
@@ -1007,87 +1111,66 @@ export class SyncaWolt implements INodeType {
 					// Field not present, skip
 				}
 
-				// Handle item_id parameter
-				try {
-					const itemId = this.getNodeParameter('item_id', i, undefined) as string;
-					if (itemId !== undefined && itemId !== '') {
-						params.item_id = itemId;
-					}
-				} catch {
-					// Field not present, skip
+				// Handle update_item parameters
+				if (operation === 'update_item') {
+					const itemUpdate: any = {};
+					const idType = this.getNodeParameter('item_identifier_type', i) as string;
+					const idValue = this.getNodeParameter('item_identifier_value', i) as string;
+
+					if (idType === 'external_id') itemUpdate.external_id = idValue;
+					else if (idType === 'gtin') itemUpdate.gtin = idValue;
+					else if (idType === 'sku') itemUpdate.sku = idValue;
+
+					try {
+						const price = this.getNodeParameter('price', i, undefined);
+						if (price !== undefined && price !== '') itemUpdate.price = price;
+					} catch { }
+
+					try {
+						const discountedPrice = this.getNodeParameter('discounted_price', i, undefined);
+						if (discountedPrice !== undefined && discountedPrice !== '') itemUpdate.discounted_price = discountedPrice;
+					} catch { }
+
+					try {
+						const enabled = this.getNodeParameter('enabled', i, undefined);
+						if (enabled !== undefined) itemUpdate.enabled = enabled;
+					} catch { }
+
+					try {
+						const disabledUntil = this.getNodeParameter('disabled_until', i, undefined);
+						if (disabledUntil !== undefined && disabledUntil !== '') itemUpdate.disabled_until = disabledUntil;
+					} catch { }
+
+					try {
+						const inStock = this.getNodeParameter('in_stock', i, undefined);
+						if (inStock !== undefined) itemUpdate.in_stock = inStock;
+					} catch { }
+
+					params.data = [itemUpdate];
 				}
 
-				// Handle item_sku parameter
-				try {
-					const itemSku = this.getNodeParameter('item_sku', i, undefined) as string;
-					if (itemSku !== undefined && itemSku !== '') {
-						params.item_sku = itemSku;
-					}
-				} catch {
-					// Field not present, skip
+				// Handle update_option_value parameters
+				if (operation === 'update_option_value') {
+					const optionUpdate: any = {};
+					const optionId = this.getNodeParameter('option_id', i) as string;
+					optionUpdate.external_id = optionId;
+
+					try {
+						const price = this.getNodeParameter('price', i, undefined);
+						if (price !== undefined && price !== '') optionUpdate.price = price;
+					} catch { }
+
+					try {
+						const enabled = this.getNodeParameter('enabled', i, undefined);
+						if (enabled !== undefined) optionUpdate.enabled = enabled;
+					} catch { }
+
+					params.data = [optionUpdate];
 				}
 
-				// Handle item_quantity parameter
-				try {
-					const itemQuantity = this.getNodeParameter('item_quantity', i, undefined) as string;
-					if (itemQuantity !== undefined && itemQuantity !== '') {
-						params.item_quantity = itemQuantity;
-					}
-				} catch {
-					// Field not present, skip
-				}
+				// Old code for item and option_value parameters removed/commented out
+				// ...
 
-				// Handle inventory parameter
-				try {
-					const inventory = this.getNodeParameter('inventory', i, undefined) as string;
-					if (inventory !== undefined && inventory !== '' && inventory !== '{}') {
-						try {
-							params.inventory = JSON.parse(inventory);
-						} catch {
-							params.inventory = inventory;
-						}
-					}
-				} catch {
-					// Field not present, skip
-				}
-
-				// Handle item parameter
-				try {
-					const item = this.getNodeParameter('item', i, undefined) as string;
-					if (item !== undefined && item !== '' && item !== '{}') {
-						try {
-							params.item = JSON.parse(item);
-						} catch {
-							params.item = item;
-						}
-					}
-				} catch {
-					// Field not present, skip
-				}
-
-				// Handle option_id parameter
-				try {
-					const optionId = this.getNodeParameter('option_id', i, undefined) as string;
-					if (optionId !== undefined && optionId !== '') {
-						params.option_id = optionId;
-					}
-				} catch {
-					// Field not present, skip
-				}
-
-				// Handle option_value parameter
-				try {
-					const optionValue = this.getNodeParameter('option_value', i, undefined) as string;
-					if (optionValue !== undefined && optionValue !== '' && optionValue !== '{}') {
-						try {
-							params.value = JSON.parse(optionValue);
-						} catch {
-							params.value = optionValue;
-						}
-					}
-				} catch {
-					// Field not present, skip
-				}
 
 				// Handle schedule parameter
 				try {
