@@ -13,6 +13,7 @@ class SyncaCashcow {
             name: 'customSyncaCashcow',
             icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
             group: ['transform'],
+            documentationUrl: 'https://n8n.synca.co.il/docs',
             version: 1,
             description: 'Invoke Cashcow actions via the Synca backend',
             defaults: { name: 'Synca Cashcow' },

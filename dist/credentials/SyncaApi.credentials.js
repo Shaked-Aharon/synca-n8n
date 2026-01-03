@@ -6,7 +6,7 @@ class SyncaApi {
         this.name = 'customSyncaApiCredentials';
         this.displayName = 'Synca API Credentials';
         this.icon = { dark: 'file:icon.svg', light: 'file:icon.svg' };
-        this.documentationUrl = 'https://synca.co.il';
+        this.documentationUrl = 'https://n8n.synca.co.il/docs';
         this.properties = [
             {
                 displayName: 'API Token',

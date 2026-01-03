@@ -94,6 +94,7 @@ class SyncaSuperpharm {
             name: 'customSyncaSuperpharm',
             icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
             group: ['transform'],
+            documentationUrl: 'https://n8n.synca.co.il/docs',
             version: 1,
             description: 'Comprehensive Superpharm Marketplace API integration for Orders, Offers, Products, Inventory, Messages, Shipping, and more',
             defaults: {

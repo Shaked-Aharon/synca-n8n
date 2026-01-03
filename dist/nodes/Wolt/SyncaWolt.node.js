@@ -7,6 +7,7 @@ class SyncaWolt {
             usableAsTool: true,
             displayName: 'Synca Wolt',
             name: 'customSyncaWolt',
+            documentationUrl: 'https://n8n.synca.co.il/docs',
             icon: { light: 'file:icon.svg', dark: 'file:icon.svg' },
             group: ['transform'],
             version: 1,
