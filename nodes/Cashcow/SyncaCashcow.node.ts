@@ -109,6 +109,25 @@ export class SyncaCashcow implements INodeType {
         description: 'Comma-separated status IDs (see Cashcow docs)',
         displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
       },
+      {
+        displayName: 'Order ID',
+        name: 'OrderID',
+        type: 'string',
+        default: '',
+        displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
+      },
+      {
+        displayName: 'Days From Now',
+        name: 'DaysFromNow',
+        type: 'number',
+        default: 30,
+        typeOptions: {
+          minValue: 0,
+          maxValue: 60,
+        },
+        description: 'Number of days from now to search for orders, max 60 days',
+        displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
+      },
 
       /* Product → Create/Update */
       ...(CashcowCreateOrUpdateProduct.decalre as any),
@@ -197,10 +216,11 @@ export class SyncaCashcow implements INodeType {
             'order_id', 'email_address',                                        // NEW
             'page', 'page_size', 'message_type', 'date_from', 'date_to',       // NEW
             'read_status', 'customer_id', 'search_query', 'order_by',          // NEW
+            'DaysFromNow', 'OrderID'
           ]) {
             try {
               const val = this.getNodeParameter(p as any, i, undefined);
-              if (val !== undefined) params[p] = val;
+              if (val !== undefined && val !== '') params[p] = val;
             } catch {
               // Field not present, skip
             }
