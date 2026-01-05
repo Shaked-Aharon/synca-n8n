@@ -6,9 +6,9 @@ exports.CashcowCheckOrderTracking = {
         {
             displayName: 'Order ID',
             name: 'order_id',
-            type: 'number',
+            type: 'string',
             required: true,
-            default: 0,
+            default: '',
             description: 'Order ID to track',
             displayOptions: { show: { resource: ['store'], operation: ['check_order_tracking'] } },
         },

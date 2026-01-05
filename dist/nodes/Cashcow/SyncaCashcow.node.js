@@ -82,6 +82,25 @@ class SyncaCashcow {
                     description: 'Comma-separated status IDs (see Cashcow docs)',
                     displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
                 },
+                {
+                    displayName: 'Order ID',
+                    name: 'OrderID',
+                    type: 'string',
+                    default: '',
+                    displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
+                },
+                {
+                    displayName: 'Days From Now',
+                    name: 'DaysFromNow',
+                    type: 'number',
+                    default: 30,
+                    typeOptions: {
+                        minValue: 0,
+                        maxValue: 60,
+                    },
+                    description: 'Number of days from now to search for orders, max 60 days',
+                    displayOptions: { show: { resource: ['store'], operation: ['list_orders'] } },
+                },
                 ...cashcow_create_or_update_product_constant_1.CashcowCreateOrUpdateProduct.decalre,
                 {
                     displayName: 'SKU',
@@ -151,10 +170,11 @@ class SyncaCashcow {
                         'order_id', 'email_address',
                         'page', 'page_size', 'message_type', 'date_from', 'date_to',
                         'read_status', 'customer_id', 'search_query', 'order_by',
+                        'DaysFromNow', 'OrderID'
                     ]) {
                         try {
                             const val = this.getNodeParameter(p, i, undefined);
-                            if (val !== undefined)
+                            if (val !== undefined && val !== '')
                                 params[p] = val;
                         }
                         catch {

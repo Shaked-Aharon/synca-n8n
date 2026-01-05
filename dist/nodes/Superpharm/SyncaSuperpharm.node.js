@@ -480,7 +480,7 @@ class SyncaSuperpharm {
                     displayOptions: {
                         show: {
                             resource: ['orders'],
-                            operation: ['get_order', 'accept_order', 'cancel_order', 'refund_order', 'ship_order', 'attach_document_to_order'],
+                            operation: ['get_order', 'accept_order', 'cancel_order', 'refund_order', 'ship_order', 'attach_document_to_order', 'update_order_tracking'],
                         },
                     },
                     description: 'The unique identifier of the order',
