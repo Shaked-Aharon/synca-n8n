@@ -42,7 +42,8 @@
 			"dist/nodes/Superpharm/SyncaSuperpharm.node.js",
 			"dist/nodes/Wolt/SyncaWolt.node.js",
 			"dist/nodes/Wolt/SyncaWoltTrigger.node.js",
-			"dist/nodes/RunERP/SyncaRunERP.node.js"
+			"dist/nodes/RunERP/SyncaRunERP.node.js",
+			"dist/nodes/Konimbo/SyncaKonimbo.node.js"
 		]
 	},
 	"devDependencies": {
