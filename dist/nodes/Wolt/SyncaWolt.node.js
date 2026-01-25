@@ -94,19 +94,9 @@ class SyncaWolt {
                     displayOptions: { show: { resource: ['menu'] } },
                     options: [
                         {
-                            name: 'Update Item Inventory',
-                            value: 'update_item_inventory',
-                            description: 'Update item inventory/availability',
-                        },
-                        {
                             name: 'Update Item',
                             value: 'update_item',
                             description: 'Update item details (price, name, etc.)',
-                        },
-                        {
-                            name: 'Update Option Value',
-                            value: 'update_option_value',
-                            description: 'Update option value (e.g., modifier price)',
                         },
                     ],
                     default: 'get_menu',
@@ -492,7 +482,7 @@ class SyncaWolt {
                     name: 'price',
                     type: 'number',
                     required: false,
-                    default: 0,
+                    default: null,
                     displayOptions: {
                         show: {
                             resource: ['menu'],
@@ -506,7 +496,7 @@ class SyncaWolt {
                     name: 'discounted_price',
                     type: 'number',
                     required: false,
-                    default: 0,
+                    default: null,
                     displayOptions: {
                         show: {
                             resource: ['menu'],
@@ -520,7 +510,7 @@ class SyncaWolt {
                     name: 'enabled',
                     type: 'boolean',
                     required: false,
-                    default: true,
+                    default: null,
                     displayOptions: {
                         show: {
                             resource: ['menu'],
@@ -534,7 +524,7 @@ class SyncaWolt {
                     name: 'disabled_until',
                     type: 'dateTime',
                     required: false,
-                    default: '',
+                    default: null,
                     displayOptions: {
                         show: {
                             resource: ['menu'],
@@ -544,15 +534,34 @@ class SyncaWolt {
                     description: 'Automatically re-enable item at this time',
                 },
                 {
-                    displayName: 'In Stock',
-                    name: 'in_stock',
-                    type: 'boolean',
-                    required: false,
-                    default: true,
+                    displayName: 'Item Stock Type',
+                    name: 'item_stock_type',
+                    type: 'options',
+                    required: true,
+                    default: 'numeric',
                     displayOptions: {
                         show: {
                             resource: ['menu'],
                             operation: ['update_item'],
+                        },
+                    },
+                    options: [
+                        { name: 'Numeric', value: 'numeric' },
+                        { name: 'Boolean', value: 'boolean' },
+                    ],
+                    description: 'Type of identifier to use for the item',
+                },
+                {
+                    displayName: 'In Stock',
+                    name: 'in_stock',
+                    type: 'boolean',
+                    required: false,
+                    default: null,
+                    displayOptions: {
+                        show: {
+                            resource: ['menu'],
+                            operation: ['update_item'],
+                            item_stock_type: ['boolean'],
                         },
                     },
                     description: 'Whether the item is in stock',
@@ -573,14 +582,15 @@ class SyncaWolt {
                 },
                 {
                     displayName: 'Item Quantity',
-                    name: 'item_quantity',
+                    name: 'inventory',
                     type: 'number',
                     required: true,
                     default: 0,
                     displayOptions: {
                         show: {
                             resource: ['menu'],
-                            operation: ['update_item_inventory'],
+                            operation: ['update_item_inventory', 'update_item'],
+                            item_stock_type: ['numeric'],
                         },
                     },
                     description: 'The quantity of the menu item',
@@ -890,6 +900,12 @@ class SyncaWolt {
                         const inStock = this.getNodeParameter('in_stock', i, undefined);
                         if (inStock !== undefined)
                             itemUpdate.in_stock = inStock;
+                    }
+                    catch { }
+                    try {
+                        const inventory = this.getNodeParameter('inventory', i, undefined);
+                        if (inventory !== undefined)
+                            itemUpdate.inventory = inventory;
                     }
                     catch { }
                     params.data = [itemUpdate];
