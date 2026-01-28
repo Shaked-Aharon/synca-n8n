@@ -79,7 +79,6 @@ exports.PriorityMethods = {
                 catch (e) {
                     formName = exports.operationToFormName[operation];
                 }
-                console.log({ credentials, credentialsId, operation, formName });
                 const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
                 const options = {
                     method: 'POST',
@@ -290,7 +289,6 @@ exports.PriorityMethods = {
                 return { fields: [], emptyFieldsNotice: 'אין שדות למסך זה' };
             }
             catch (error) {
-                console.log({ error });
                 return { fields: [], emptyFieldsNotice: 'אין שדות למסך זה' };
             }
         },

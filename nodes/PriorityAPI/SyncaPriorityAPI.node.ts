@@ -6,7 +6,7 @@ import {
 	IHttpRequestOptions,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
-    NodeConnectionType,
+	NodeConnectionType,
 } from 'n8n-workflow';
 
 export class SyncaPriorityAPI implements INodeType {
@@ -275,7 +275,7 @@ export class SyncaPriorityAPI implements INodeType {
 				// This method should load available credentials from your API
 				// For now, returning a placeholder - you'll need to implement the actual API call
 				try {
-					const credentials = await this.getCredentials<{apiToken: string; baseUrl: string;}>('customSyncaApiCredentials');
+					const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
 					const options: IHttpRequestOptions = {
 						method: 'GET',
 						url: `${credentials.baseUrl}/v1/invoke/get-credentials`, // Adjust this endpoint as needed
@@ -283,16 +283,15 @@ export class SyncaPriorityAPI implements INodeType {
 							'x-api-token': credentials?.apiToken as string,
 						},
 					};
-					console.log({options})
 					const response = await this.helpers.httpRequest(options);
-					
+
 					if (Array.isArray(response)) {
 						return response.map((cred: any) => ({
 							name: cred.name || cred.id,
 							value: cred.id,
 						}));
 					}
-					
+
 					return [];
 				} catch (error) {
 					// Return empty array if credentials endpoint is not available
@@ -319,9 +318,9 @@ export class SyncaPriorityAPI implements INodeType {
 				const additionalFields = this.getNodeParameter('additionalFields', i) as any;
 
 				// Get credentials
-				const credentials = await this.getCredentials<{apiToken: string; baseUrl: string;}>('customSyncaApiCredentials');
+				const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
 				const apiToken = credentials.apiToken;
-                const baseURL = credentials.baseUrl;
+				const baseURL = credentials.baseUrl;
 				// Build action name
 				let actionName = '';
 				switch (operation) {
@@ -341,7 +340,7 @@ export class SyncaPriorityAPI implements INodeType {
 
 				// Build query parameters
 				const queryParams: { [key: string]: string } = {};
-				
+
 				if (additionalFields.top !== undefined) {
 					queryParams.top = additionalFields.top.toString();
 				}
@@ -364,7 +363,7 @@ export class SyncaPriorityAPI implements INodeType {
 				// Add data to query params for create and update operations
 				if (operation === 'create' || operation === 'update') {
 					let data = this.getNodeParameter('data', i) as string;
-					if(data) {data = JSON.parse(data);}
+					if (data) { data = JSON.parse(data); }
 					queryParams.data = data;
 				}
 
@@ -384,8 +383,6 @@ export class SyncaPriorityAPI implements INodeType {
 					body: queryParams
 				};
 
-				console.log({executeOptions: options})
-
 				const responseData = await this.helpers.httpRequest(options);
 
 				if (Array.isArray(responseData)) {
@@ -402,11 +399,10 @@ export class SyncaPriorityAPI implements INodeType {
 					});
 				}
 			} catch (error: any) {
-				console.log({error})
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: {
-							error: error.message,
+							error: error?.message ?? error,
 						},
 						pairedItem: { item: i },
 					});

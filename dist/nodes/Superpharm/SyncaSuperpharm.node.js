@@ -37,27 +37,6 @@ function addResourceSpecificParams(requestParams, resource, operation, itemIndex
         }
     }
 }
-async function makeRequestWithRetry(options, maxRetries, httpRequest, logger) {
-    var _a;
-    let attempt = 0;
-    while (attempt <= maxRetries) {
-        try {
-            return await httpRequest(options);
-        }
-        catch (error) {
-            if (((_a = error.response) === null || _a === void 0 ? void 0 : _a.status) === 429 && attempt < maxRetries) {
-                const retryAfter = error.response.headers['retry-after'];
-                const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000;
-                logger === null || logger === void 0 ? void 0 : logger.warn(`Rate limited, retrying in ${waitTime}ms`, { attempt });
-                await new Promise(resolve => setTimeout(resolve, waitTime));
-                attempt++;
-            }
-            else {
-                throw error;
-            }
-        }
-    }
-}
 function processResponseData(responseData, resource, operation) {
     if (responseData === null || responseData === undefined) {
         return {};
@@ -1119,12 +1098,7 @@ class SyncaSuperpharm {
                     params: requestParams
                 });
                 let responseData;
-                if (advancedOptions.handleRateLimit) {
-                    responseData = await makeRequestWithRetry(options, 3, this.helpers.httpRequest, this.logger);
-                }
-                else {
-                    responseData = await this.helpers.httpRequest(options);
-                }
+                responseData = await this.helpers.httpRequest(options);
                 if (advancedOptions.returnFullResponse) {
                     returnData.push({
                         json: responseData,

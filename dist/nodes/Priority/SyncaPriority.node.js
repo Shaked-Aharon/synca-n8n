@@ -155,6 +155,7 @@ class SyncaPriority {
         this.methods = methods_1.PriorityMethods;
     }
     async execute() {
+        var _a;
         const items = this.getInputData();
         const returnData = [];
         for (let i = 0; i < items.length; i++) {
@@ -292,7 +293,6 @@ class SyncaPriority {
                     },
                     body: requestParams,
                 };
-                console.log({ executeOptions: options });
                 const responseData = await this.helpers.httpRequest(options);
                 returnData.push({
                     json: responseData,
@@ -300,11 +300,10 @@ class SyncaPriority {
                 });
             }
             catch (error) {
-                console.log({ error });
                 if (this.continueOnFail()) {
                     returnData.push({
                         json: {
-                            error: error.message,
+                            error: (_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : error,
                         },
                         pairedItem: { item: i },
                     });

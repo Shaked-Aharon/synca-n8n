@@ -329,8 +329,6 @@ export class SyncaPriority implements INodeType {
 					body: requestParams,
 				};
 
-				console.log({ executeOptions: options });
-
 				const responseData = await this.helpers.httpRequest(options);
 
 				returnData.push({
@@ -339,11 +337,10 @@ export class SyncaPriority implements INodeType {
 				});
 
 			} catch (error: any) {
-				console.log({ error });
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: {
-							error: error.message,
+							error: error?.message ?? error,
 						},
 						pairedItem: { item: i },
 					});

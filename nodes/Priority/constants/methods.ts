@@ -83,7 +83,6 @@ export const PriorityMethods = {
                 } catch (e) {
                     formName = operationToFormName[operation];
                 }
-                console.log({ credentials, credentialsId, operation, formName })
                 const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
                 const options: IHttpRequestOptions = {
                     method: 'POST',
@@ -142,7 +141,7 @@ export const PriorityMethods = {
                 const credentialsId = this.getNodeParameter('credentials') as string;
                 // const formName = this.getNodeParameter('formName') as string;
                 // const subFormName = this.getNodeParameter('subFormName', '') as string;
-                 const operation = this.getNodeParameter('operation') as string;
+                const operation = this.getNodeParameter('operation') as string;
                 let formName;
                 try {
                     formName = this.getNodeParameter('formName') as string;
@@ -317,7 +316,6 @@ export const PriorityMethods = {
 
                 return { fields: [], emptyFieldsNotice: 'אין שדות למסך זה' };
             } catch (error) {
-                console.log({ error })
                 return { fields: [], emptyFieldsNotice: 'אין שדות למסך זה' };
             }
         },

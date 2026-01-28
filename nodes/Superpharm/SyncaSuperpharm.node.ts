@@ -7,7 +7,7 @@ import {
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
 	NodeConnectionType,
-	Logger,
+	// Logger,
 } from 'n8n-workflow';
 
 
@@ -49,26 +49,26 @@ function addResourceSpecificParams(requestParams: any, resource: string, operati
 	}
 }
 
-async function makeRequestWithRetry(options: IHttpRequestOptions, maxRetries: number, httpRequest: (requestOptions: IHttpRequestOptions) => Promise<any>, logger: Logger): Promise<any> {
-	let attempt = 0;
-	while (attempt <= maxRetries) {
-		try {
-			return await httpRequest(options);
-		} catch (error: any) {
-			if (error.response?.status === 429 && attempt < maxRetries) {
-				// Rate limited, wait and retry
-				const retryAfter = error.response.headers['retry-after'];
-				const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000;
+// async function makeRequestWithRetry(options: IHttpRequestOptions, maxRetries: number, httpRequest: (requestOptions: IHttpRequestOptions) => Promise<any>, logger: Logger): Promise<any> {
+// 	let attempt = 0;
+// 	while (attempt <= maxRetries) {
+// 		try {
+// 			return await httpRequest(options);
+// 		} catch (error: any) {
+// 			if (error.response?.status === 429 && attempt < maxRetries) {
+// 				// Rate limited, wait and retry
+// 				const retryAfter = error.response.headers['retry-after'];
+// 				const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000;
 
-				logger?.warn(`Rate limited, retrying in ${waitTime}ms`, { attempt });
-				await new Promise(resolve => setTimeout(resolve, waitTime));
-				attempt++;
-			} else {
-				throw error;
-			}
-		}
-	}
-}
+// 				logger?.warn(`Rate limited, retrying in ${waitTime}ms`, { attempt });
+// 				await new Promise(resolve => setTimeout(resolve, waitTime));
+// 				attempt++;
+// 			} else {
+// 				throw error;
+// 			}
+// 		}
+// 	}
+// }
 
 function processResponseData(responseData: any, resource: string, operation: string): any {
 	// Handle different response structures based on Mirakl API patterns
@@ -1206,11 +1206,11 @@ export class SyncaSuperpharm implements INodeType {
 				let responseData: any;
 
 				// Handle rate limiting if enabled
-				if (advancedOptions.handleRateLimit) {
-					responseData = await makeRequestWithRetry(options, 3, this.helpers.httpRequest, this.logger);
-				} else {
-					responseData = await this.helpers.httpRequest(options);
-				}
+				// if (advancedOptions.handleRateLimit) {
+				// 	responseData = await makeRequestWithRetry(options, 3, this.helpers.httpRequest, this.logger);
+				// } else {
+				responseData = await this.helpers.httpRequest(options);
+				// }
 
 				// Process response based on operation and options
 				if (advancedOptions.returnFullResponse) {
