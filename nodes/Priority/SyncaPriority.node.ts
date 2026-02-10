@@ -3,12 +3,13 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	IHttpRequestOptions,
+	// IHttpRequestOptions,
 	NodeConnectionType,
 	ResourceMapperField,
 	ResourceMapperValue,
 	NodeOperationError,
 } from 'n8n-workflow';
+import { SyncaService } from '../shared/SyncaService';
 import { operationToFormName, PriorityMethods } from './constants/methods';
 import { PriorityProducts } from './constants/priority-products.constant';
 import { PrioritySales } from './constants/priority-sales.constant';
@@ -169,9 +170,7 @@ export class SyncaPriority implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			try {
 				const credentialsId = this.getNodeParameter('credentials', i) as string;
-				const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-				const apiToken = credentials.apiToken;
-				const baseURL = credentials.baseUrl;
+				const service = new SyncaService(this);
 
 				// const resource = this.getNodeParameter('resource', i) as string;
 				let operation = this.getNodeParameter('operation', i) as string;
@@ -315,21 +314,7 @@ export class SyncaPriority implements INodeType {
 						}
 				}
 
-				// Build URL
-				const url = `${baseURL}/v1/invoke/${credentialsId}/${operation}`;
-
-				// Make HTTP request
-				const options: IHttpRequestOptions = {
-					method: 'POST',
-					url,
-					headers: {
-						'x-api-token': apiToken,
-						'Content-Type': 'application/json',
-					},
-					body: requestParams,
-				};
-
-				const responseData = await this.helpers.httpRequest(options);
+				const responseData = await service.invoke(credentialsId, operation, requestParams);
 
 				returnData.push({
 					json: responseData,

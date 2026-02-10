@@ -3,11 +3,12 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	IHttpRequestOptions,
+	// IHttpRequestOptions,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
 	NodeConnectionType,
 } from 'n8n-workflow';
+import { SyncaService } from '../shared/SyncaService';
 
 export class SyncaPriorityAPI implements INodeType {
 	description: INodeTypeDescription = {
@@ -272,36 +273,8 @@ export class SyncaPriorityAPI implements INodeType {
 	methods = {
 		loadOptions: {
 			async getCredentials(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				// This method should load available credentials from your API
-				// For now, returning a placeholder - you'll need to implement the actual API call
-				try {
-					const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-					const options: IHttpRequestOptions = {
-						method: 'GET',
-						url: `${credentials.baseUrl}/v1/invoke/get-credentials`, // Adjust this endpoint as needed
-						headers: {
-							'x-api-token': credentials?.apiToken as string,
-						},
-					};
-					const response = await this.helpers.httpRequest(options);
-
-					if (Array.isArray(response)) {
-						return response.map((cred: any) => ({
-							name: cred.name || cred.id,
-							value: cred.id,
-						}));
-					}
-
-					return [];
-				} catch (error) {
-					// Return empty array if credentials endpoint is not available
-					return [
-						{
-							name: 'Default Credentials',
-							value: 'default',
-						},
-					];
-				}
+				const service = new SyncaService(this);
+				return await service.getProviderCredentials();
 			},
 		},
 	};
@@ -316,11 +289,7 @@ export class SyncaPriorityAPI implements INodeType {
 				const operation = this.getNodeParameter('operation', i) as string;
 				const credentialsId = this.getNodeParameter('credentials', i) as string;
 				const additionalFields = this.getNodeParameter('additionalFields', i) as any;
-
-				// Get credentials
-				const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-				const apiToken = credentials.apiToken;
-				const baseURL = credentials.baseUrl;
+				const service = new SyncaService(this);
 				// Build action name
 				let actionName = '';
 				switch (operation) {
@@ -368,22 +337,8 @@ export class SyncaPriorityAPI implements INodeType {
 				}
 
 				// Build URL
-				const baseUrl = `${baseURL}/v1/invoke/${credentialsId}/${actionName}`;
-				// const queryString = new URLSearchParams(queryParams).toString();
-				// const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-
-				// Make HTTP request
-				const options: IHttpRequestOptions = {
-					method: 'POST',
-					url: baseUrl,
-					headers: {
-						'x-api-token': apiToken,
-						'Content-Type': 'application/json',
-					},
-					body: queryParams
-				};
-
-				const responseData = await this.helpers.httpRequest(options);
+				// Make HTTP request via SyncaService
+				const responseData = await service.invoke(credentialsId, actionName, queryParams);
 
 				if (Array.isArray(responseData)) {
 					responseData.forEach((item) => {

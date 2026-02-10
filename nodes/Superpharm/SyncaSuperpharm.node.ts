@@ -3,12 +3,13 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	IHttpRequestOptions,
+	// IHttpRequestOptions,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
 	NodeConnectionType,
 	// Logger,
 } from 'n8n-workflow';
+import { SyncaService } from '../shared/SyncaService';
 
 
 function addResourceSpecificParams(requestParams: any, resource: string, operation: string, itemIndex: number, getNodeParameter: (parameterName: string, itemIndex: number, fallbackValue?: any) => string | number | boolean | object): void {
@@ -1107,34 +1108,8 @@ export class SyncaSuperpharm implements INodeType {
 	methods = {
 		loadOptions: {
 			async getCredentials(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				try {
-					const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-					const options: IHttpRequestOptions = {
-						method: 'GET',
-						url: `${credentials.baseUrl}/v1/invoke/get-credentials`,
-						headers: {
-							'x-api-token': credentials?.apiToken as string,
-						},
-					};
-
-					const response = await this.helpers.httpRequest(options);
-
-					if (Array.isArray(response)) {
-						return response.map((cred: any) => ({
-							name: cred.name || cred.id,
-							value: cred.id,
-						}));
-					}
-
-					return [];
-				} catch (error) {
-					return [
-						{
-							name: 'Default Superpharm Credentials',
-							value: 'default',
-						},
-					];
-				}
+				const service = new SyncaService(this);
+				return await service.getProviderCredentials();
 			},
 		},
 	};
@@ -1153,7 +1128,7 @@ export class SyncaSuperpharm implements INodeType {
 				const advancedOptions = this.getNodeParameter('advancedOptions', i, {}) as any;
 
 				// Get credentials
-				const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
+				const service = new SyncaService(this);
 
 				// Build request parameters
 				const requestParams: any = {
@@ -1163,43 +1138,13 @@ export class SyncaSuperpharm implements INodeType {
 
 				// Add resource-specific parameters
 				addResourceSpecificParams(requestParams, resource, operation, i, this.getNodeParameter as any);
-				// if (operation === 'attach_document_to_order') {
-
-				// if (documentSource === 'file') {
-				// 	const binaryPropertyName = this.getNodeParameter('documentFile', i) as string;
-				// 	const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
-
-				// 	// Add binary data to request
-				// 	requestParams.documentFile = {
-				// 		filename: binaryData.fileName,
-				// 		mimeType: binaryData.mimeType,
-				// 		data: binaryData.data, // base64 encoded data
-				// 	};
-				// }
-				// }
-				// Build headers
-				const headers: Record<string, string> = {
-					'x-api-token': credentials.apiToken,
-					'Content-Type': 'application/json',
-				};
 
 				// Set timeout if specified
 				const timeout = advancedOptions.timeout ? advancedOptions.timeout * 1000 : 60000;
 
-				// Make the API request
-				const options: IHttpRequestOptions = {
-					method: 'POST',
-					url: `${credentials.baseUrl}/v1/invoke/${credentialsId}/${operation}`,
-					headers,
-					body: requestParams,
-					json: true,
-					timeout,
-				};
-
 				this.logger?.debug('Superpharm API Request', {
 					action: operation,
 					resource,
-					url: options.url,
 					params: requestParams
 				});
 
@@ -1209,7 +1154,7 @@ export class SyncaSuperpharm implements INodeType {
 				// if (advancedOptions.handleRateLimit) {
 				// 	responseData = await makeRequestWithRetry(options, 3, this.helpers.httpRequest, this.logger);
 				// } else {
-				responseData = await this.helpers.httpRequest(options);
+				responseData = await service.invoke(credentialsId, operation, requestParams, 'POST', { timeout });
 				// }
 
 				// Process response based on operation and options

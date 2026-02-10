@@ -3,7 +3,7 @@ import {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
-  IHttpRequestOptions,
+  // IHttpRequestOptions,
   ILoadOptionsFunctions,
   INodePropertyOptions,
   NodeConnectionType,
@@ -13,10 +13,7 @@ import { CashcowCreateOrUpdateProduct } from './constants/cashcow-create-or-upda
 import { CashcowCheckOrderTracking } from './constants/cashcow-check-order-tracking.constant';
 import { CashcowGetStoreMailbox } from './constants/cashcow-get-store-mailbox.constant';
 
-interface SyncaCreds {
-  apiToken: string; // Synca dashboard token
-  baseUrl: string;  // e.g. https://synca.example.com
-}
+import { SyncaService } from '../shared/SyncaService';
 
 export class SyncaCashcow implements INodeType {
   description: INodeTypeDescription = {
@@ -164,19 +161,8 @@ export class SyncaCashcow implements INodeType {
   methods = {
     loadOptions: {
       async getCredentials(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        try {
-          const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');
-          const res = await this.helpers.httpRequest({
-            method: 'GET',
-            url: `${baseUrl}/v1/invoke/get-credentials`,
-            headers: { 'x-api-token': apiToken },
-          });
-          return Array.isArray(res)
-            ? res.map((c: any) => ({ name: c.name || c.id, value: c.id }))
-            : [];
-        } catch {
-          return [{ name: 'Default', value: 'default' }];
-        }
+        const service = new SyncaService(this);
+        return await service.getProviderCredentials();
       },
     },
   };
@@ -189,7 +175,7 @@ export class SyncaCashcow implements INodeType {
     const items = this.getInputData();
     const out: INodeExecutionData[] = [];
 
-    const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');
+    const service = new SyncaService(this);
 
     for (let i = 0; i < items.length; i++) {
       try {
@@ -245,15 +231,7 @@ export class SyncaCashcow implements INodeType {
         //   }
         // }
 
-        const req: IHttpRequestOptions = {
-          method: 'POST',
-          url: `${baseUrl}/v1/invoke/${credentialId}/${operation}`,
-          headers: { 'x-api-token': apiToken, 'Content-Type': 'application/json' },
-          body: params,
-          json: true,
-        };
-
-        const response = await this.helpers.httpRequest(req);
+        const response = await service.invoke(credentialId, operation, params);
         out.push({ json: response, pairedItem: { item: i } });
       } catch (err) {
         if (this.continueOnFail()) {

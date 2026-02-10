@@ -4,16 +4,13 @@ import {
     INodeType,
     INodeTypeDescription,
     IWebhookResponseData,
-    IHttpRequestOptions,
+    // IHttpRequestOptions,
     ILoadOptionsFunctions,
     INodePropertyOptions,
     NodeConnectionType,
 } from 'n8n-workflow';
 
-interface SyncaCreds {
-    apiToken: string;
-    baseUrl: string;
-}
+import { SyncaService } from '../shared/SyncaService';
 
 export class SyncaWoltTrigger implements INodeType {
     description: INodeTypeDescription = {
@@ -112,20 +109,8 @@ export class SyncaWoltTrigger implements INodeType {
     methods = {
         loadOptions: {
             async getCredentials(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-                try {
-                    const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');
-                    const res = await this.helpers.httpRequest({
-                        method: 'GET',
-                        url: `${baseUrl}/v1/invoke/get-credentials`,
-                        headers: { 'x-api-token': apiToken },
-                        json: true,
-                    });
-                    return Array.isArray(res)
-                        ? res.map((c: any) => ({ name: c.name || c.id, value: c.id }))
-                        : [];
-                } catch {
-                    return [{ name: 'Default', value: 'default' }];
-                }
+                const service = new SyncaService(this);
+                return await service.getProviderCredentials();
             },
         },
     };
@@ -140,8 +125,8 @@ export class SyncaWoltTrigger implements INodeType {
                 const events = this.getNodeParameter('eventFilter') as string[];
                 const webhookUrl = this.getNodeWebhookUrl('default');
 
-                const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');
-                const endpoint = `${baseUrl}/v1/n8n/triggers/register`;
+                const service = new SyncaService(this);
+                const path = '/v1/n8n/triggers/register';
 
                 const body = {
                     credentialId,
@@ -149,19 +134,8 @@ export class SyncaWoltTrigger implements INodeType {
                     targetUrl: webhookUrl,
                 };
 
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: endpoint,
-                    headers: {
-                        'x-api-token': apiToken,
-                        'Content-Type': 'application/json',
-                    },
-                    body,
-                    json: true,
-                };
-
                 try {
-                    const response = await this.helpers.httpRequest(options);
+                    const response = await service.authenticatedRequest(path, 'POST', body);
 
                     if (response && response.id) {
                         const webhookData = this.getWorkflowStaticData('node');
@@ -180,20 +154,11 @@ export class SyncaWoltTrigger implements INodeType {
                     return true;
                 }
 
-                const { apiToken, baseUrl } = await this.getCredentials<SyncaCreds>('customSyncaApiCredentials');
-                const endpoint = `${baseUrl}/v1/n8n/triggers/${webhookData.webhookId}`;
-
-                const options: IHttpRequestOptions = {
-                    method: 'DELETE',
-                    url: endpoint,
-                    headers: {
-                        'x-api-token': apiToken,
-                    },
-                    json: true,
-                };
+                const service = new SyncaService(this);
+                const path = `/v1/n8n/triggers/${webhookData.webhookId}`;
 
                 try {
-                    await this.helpers.httpRequest(options);
+                    await service.authenticatedRequest(path, 'DELETE', undefined);
                     delete webhookData.webhookId;
                     return true;
                 } catch (error) {
