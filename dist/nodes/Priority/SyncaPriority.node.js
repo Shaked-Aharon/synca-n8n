@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaPriority = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
+const SyncaService_1 = require("../shared/SyncaService");
 const methods_1 = require("./constants/methods");
 const priority_products_constant_1 = require("./constants/priority-products.constant");
 const priority_sales_constant_1 = require("./constants/priority-sales.constant");
@@ -161,9 +162,7 @@ class SyncaPriority {
         for (let i = 0; i < items.length; i++) {
             try {
                 const credentialsId = this.getNodeParameter('credentials', i);
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const apiToken = credentials.apiToken;
-                const baseURL = credentials.baseUrl;
+                const service = new SyncaService_1.SyncaService(this);
                 let operation = this.getNodeParameter('operation', i);
                 let requestParams = {};
                 let tempFields;
@@ -283,17 +282,7 @@ class SyncaPriority {
                             };
                         }
                 }
-                const url = `${baseURL}/v1/invoke/${credentialsId}/${operation}`;
-                const options = {
-                    method: 'POST',
-                    url,
-                    headers: {
-                        'x-api-token': apiToken,
-                        'Content-Type': 'application/json',
-                    },
-                    body: requestParams,
-                };
-                const responseData = await this.helpers.httpRequest(options);
+                const responseData = await service.invoke(credentialsId, operation, requestParams);
                 returnData.push({
                     json: responseData,
                     pairedItem: { item: i },

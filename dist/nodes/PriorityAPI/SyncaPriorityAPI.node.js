@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaPriorityAPI = void 0;
+const SyncaService_1 = require("../shared/SyncaService");
 class SyncaPriorityAPI {
     constructor() {
         this.description = {
@@ -261,32 +262,8 @@ class SyncaPriorityAPI {
         this.methods = {
             loadOptions: {
                 async getCredentials() {
-                    try {
-                        const credentials = await this.getCredentials('customSyncaApiCredentials');
-                        const options = {
-                            method: 'GET',
-                            url: `${credentials.baseUrl}/v1/invoke/get-credentials`,
-                            headers: {
-                                'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                            },
-                        };
-                        const response = await this.helpers.httpRequest(options);
-                        if (Array.isArray(response)) {
-                            return response.map((cred) => ({
-                                name: cred.name || cred.id,
-                                value: cred.id,
-                            }));
-                        }
-                        return [];
-                    }
-                    catch (error) {
-                        return [
-                            {
-                                name: 'Default Credentials',
-                                value: 'default',
-                            },
-                        ];
-                    }
+                    const service = new SyncaService_1.SyncaService(this);
+                    return await service.getProviderCredentials();
                 },
             },
         };
@@ -301,9 +278,7 @@ class SyncaPriorityAPI {
                 const operation = this.getNodeParameter('operation', i);
                 const credentialsId = this.getNodeParameter('credentials', i);
                 const additionalFields = this.getNodeParameter('additionalFields', i);
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const apiToken = credentials.apiToken;
-                const baseURL = credentials.baseUrl;
+                const service = new SyncaService_1.SyncaService(this);
                 let actionName = '';
                 switch (operation) {
                     case 'getMany':
@@ -343,17 +318,7 @@ class SyncaPriorityAPI {
                     }
                     queryParams.data = data;
                 }
-                const baseUrl = `${baseURL}/v1/invoke/${credentialsId}/${actionName}`;
-                const options = {
-                    method: 'POST',
-                    url: baseUrl,
-                    headers: {
-                        'x-api-token': apiToken,
-                        'Content-Type': 'application/json',
-                    },
-                    body: queryParams
-                };
-                const responseData = await this.helpers.httpRequest(options);
+                const responseData = await service.invoke(credentialsId, actionName, queryParams);
                 if (Array.isArray(responseData)) {
                     responseData.forEach((item) => {
                         returnData.push({

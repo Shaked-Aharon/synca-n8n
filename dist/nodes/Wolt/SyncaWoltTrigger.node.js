@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaWoltTrigger = void 0;
+const SyncaService_1 = require("../shared/SyncaService");
 class SyncaWoltTrigger {
     constructor() {
         this.description = {
@@ -94,21 +95,8 @@ class SyncaWoltTrigger {
         this.methods = {
             loadOptions: {
                 async getCredentials() {
-                    try {
-                        const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
-                        const res = await this.helpers.httpRequest({
-                            method: 'GET',
-                            url: `${baseUrl}/v1/invoke/get-credentials`,
-                            headers: { 'x-api-token': apiToken },
-                            json: true,
-                        });
-                        return Array.isArray(res)
-                            ? res.map((c) => ({ name: c.name || c.id, value: c.id }))
-                            : [];
-                    }
-                    catch {
-                        return [{ name: 'Default', value: 'default' }];
-                    }
+                    const service = new SyncaService_1.SyncaService(this);
+                    return await service.getProviderCredentials();
                 },
             },
         };
@@ -121,25 +109,15 @@ class SyncaWoltTrigger {
                     const credentialId = this.getNodeParameter('credentials');
                     const events = this.getNodeParameter('eventFilter');
                     const webhookUrl = this.getNodeWebhookUrl('default');
-                    const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
-                    const endpoint = `${baseUrl}/v1/n8n/triggers/register`;
+                    const service = new SyncaService_1.SyncaService(this);
+                    const path = '/v1/n8n/triggers/register';
                     const body = {
                         credentialId,
                         events: events.length > 0 ? events : ['*'],
                         targetUrl: webhookUrl,
                     };
-                    const options = {
-                        method: 'POST',
-                        url: endpoint,
-                        headers: {
-                            'x-api-token': apiToken,
-                            'Content-Type': 'application/json',
-                        },
-                        body,
-                        json: true,
-                    };
                     try {
-                        const response = await this.helpers.httpRequest(options);
+                        const response = await service.authenticatedRequest(path, 'POST', body);
                         if (response && response.id) {
                             const webhookData = this.getWorkflowStaticData('node');
                             webhookData.webhookId = response.id;
@@ -156,18 +134,10 @@ class SyncaWoltTrigger {
                     if (!webhookData.webhookId) {
                         return true;
                     }
-                    const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
-                    const endpoint = `${baseUrl}/v1/n8n/triggers/${webhookData.webhookId}`;
-                    const options = {
-                        method: 'DELETE',
-                        url: endpoint,
-                        headers: {
-                            'x-api-token': apiToken,
-                        },
-                        json: true,
-                    };
+                    const service = new SyncaService_1.SyncaService(this);
+                    const path = `/v1/n8n/triggers/${webhookData.webhookId}`;
                     try {
-                        await this.helpers.httpRequest(options);
+                        await service.authenticatedRequest(path, 'DELETE', undefined);
                         delete webhookData.webhookId;
                         return true;
                     }

@@ -20,6 +20,17 @@ class SyncaApi {
                 description: 'The API token for authentication',
             },
             {
+                displayName: 'Secret Key',
+                name: 'secretKey',
+                type: 'string',
+                typeOptions: {
+                    password: true,
+                },
+                default: '',
+                required: true,
+                description: 'The Secret Key for authentication',
+            },
+            {
                 displayName: 'Base URL',
                 name: 'baseUrl',
                 type: 'string',

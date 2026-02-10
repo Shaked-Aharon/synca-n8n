@@ -6,6 +6,7 @@ const run_erp_cancel_shipment_constant_1 = require("./constants/run-erp-cancel-s
 const run_erp_print_label_constant_1 = require("./constants/run-erp-print-label.constant");
 const run_erp_get_tracking_constant_1 = require("./constants/run-erp-get-tracking.constant");
 const run_erp_get_pickup_points_constant_1 = require("./constants/run-erp-get-pickup-points.constant");
+const SyncaService_1 = require("../shared/SyncaService");
 class SyncaRunERP {
     constructor() {
         this.description = {
@@ -125,21 +126,8 @@ class SyncaRunERP {
         this.methods = {
             loadOptions: {
                 async getCredentials() {
-                    try {
-                        const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
-                        const res = await this.helpers.httpRequest({
-                            method: 'GET',
-                            url: `${baseUrl}/v1/invoke/get-credentials`,
-                            headers: { 'x-api-token': apiToken },
-                            qs: { provider: 'run_erp' },
-                        });
-                        return Array.isArray(res)
-                            ? res.map((c) => ({ name: c.name || c.id, value: c.id }))
-                            : [];
-                    }
-                    catch {
-                        return [{ name: 'Default', value: 'default' }];
-                    }
+                    const service = new SyncaService_1.SyncaService(this);
+                    return await service.getProviderCredentials('run_erp');
                 },
             },
         };
@@ -147,7 +135,7 @@ class SyncaRunERP {
     async execute() {
         const items = this.getInputData();
         const out = [];
-        const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
+        const service = new SyncaService_1.SyncaService(this);
         for (let i = 0; i < items.length; i++) {
             try {
                 const credentialId = this.getNodeParameter('credentials', i);
@@ -172,14 +160,7 @@ class SyncaRunERP {
                     default:
                         throw new Error(`Unknown operation: ${operation}`);
                 }
-                const req = {
-                    method: 'POST',
-                    url: `${baseUrl}/v1/invoke/${credentialId}/${operation}`,
-                    headers: { 'x-api-token': apiToken, 'Content-Type': 'application/json' },
-                    body: params,
-                    json: true,
-                };
-                const response = await this.helpers.httpRequest(req);
+                const response = await service.invoke(credentialId, operation, params);
                 if (operation === 'print_label' && response.success && response.pdf_data) {
                     out.push({
                         json: {

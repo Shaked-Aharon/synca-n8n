@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaSuperpharm = void 0;
+const SyncaService_1 = require("../shared/SyncaService");
 function addResourceSpecificParams(requestParams, resource, operation, itemIndex, getNodeParameter) {
     const idFields = ['order_id', 'offer_id', 'return_id', 'tracking_id', 'thread_id', 'documentType', 'documentUrl', 'carrier_code', 'carrier_name', 'carrier_standard_code', 'tracking_number', 'carrier_url'];
     for (const field of idFields) {
@@ -1030,32 +1031,8 @@ class SyncaSuperpharm {
         this.methods = {
             loadOptions: {
                 async getCredentials() {
-                    try {
-                        const credentials = await this.getCredentials('customSyncaApiCredentials');
-                        const options = {
-                            method: 'GET',
-                            url: `${credentials.baseUrl}/v1/invoke/get-credentials`,
-                            headers: {
-                                'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                            },
-                        };
-                        const response = await this.helpers.httpRequest(options);
-                        if (Array.isArray(response)) {
-                            return response.map((cred) => ({
-                                name: cred.name || cred.id,
-                                value: cred.id,
-                            }));
-                        }
-                        return [];
-                    }
-                    catch (error) {
-                        return [
-                            {
-                                name: 'Default Superpharm Credentials',
-                                value: 'default',
-                            },
-                        ];
-                    }
+                    const service = new SyncaService_1.SyncaService(this);
+                    return await service.getProviderCredentials();
                 },
             },
         };
@@ -1072,33 +1049,20 @@ class SyncaSuperpharm {
                 const queryOptions = this.getNodeParameter('queryOptions', i, {});
                 const filters = this.getNodeParameter('filters', i, {});
                 const advancedOptions = this.getNodeParameter('advancedOptions', i, {});
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
+                const service = new SyncaService_1.SyncaService(this);
                 const requestParams = {
                     ...queryOptions,
                     ...filters,
                 };
                 addResourceSpecificParams(requestParams, resource, operation, i, this.getNodeParameter);
-                const headers = {
-                    'x-api-token': credentials.apiToken,
-                    'Content-Type': 'application/json',
-                };
                 const timeout = advancedOptions.timeout ? advancedOptions.timeout * 1000 : 60000;
-                const options = {
-                    method: 'POST',
-                    url: `${credentials.baseUrl}/v1/invoke/${credentialsId}/${operation}`,
-                    headers,
-                    body: requestParams,
-                    json: true,
-                    timeout,
-                };
                 (_a = this.logger) === null || _a === void 0 ? void 0 : _a.debug('Superpharm API Request', {
                     action: operation,
                     resource,
-                    url: options.url,
                     params: requestParams
                 });
                 let responseData;
-                responseData = await this.helpers.httpRequest(options);
+                responseData = await service.invoke(credentialsId, operation, requestParams, 'POST', { timeout });
                 if (advancedOptions.returnFullResponse) {
                     returnData.push({
                         json: responseData,

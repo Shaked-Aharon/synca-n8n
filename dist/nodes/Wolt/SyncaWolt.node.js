@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SyncaWolt = void 0;
+const SyncaService_1 = require("../shared/SyncaService");
 class SyncaWolt {
     constructor() {
         this.description = {
@@ -644,20 +645,8 @@ class SyncaWolt {
         this.methods = {
             loadOptions: {
                 async getCredentials() {
-                    try {
-                        const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
-                        const res = await this.helpers.httpRequest({
-                            method: 'GET',
-                            url: `${baseUrl}/v1/invoke/get-credentials`,
-                            headers: { 'x-api-token': apiToken },
-                        });
-                        return Array.isArray(res)
-                            ? res.map((c) => ({ name: c.name || c.id, value: c.id }))
-                            : [];
-                    }
-                    catch {
-                        return [{ name: 'Default', value: 'default' }];
-                    }
+                    const service = new SyncaService_1.SyncaService(this);
+                    return await service.getProviderCredentials();
                 },
             },
         };
@@ -665,7 +654,7 @@ class SyncaWolt {
     async execute() {
         const items = this.getInputData();
         const out = [];
-        const { apiToken, baseUrl } = await this.getCredentials('customSyncaApiCredentials');
+        const service = new SyncaService_1.SyncaService(this);
         for (let i = 0; i < items.length; i++) {
             try {
                 const credentialId = this.getNodeParameter('credentials', i);
@@ -949,14 +938,7 @@ class SyncaWolt {
                 }
                 catch {
                 }
-                const req = {
-                    method: 'POST',
-                    url: `${baseUrl}/v1/invoke/${credentialId}/${operation}`,
-                    headers: { 'x-api-token': apiToken, 'Content-Type': 'application/json' },
-                    body: params,
-                    json: true,
-                };
-                const response = await this.helpers.httpRequest(req);
+                const response = await service.invoke(credentialId, operation, params);
                 out.push({ json: response, pairedItem: { item: i } });
             }
             catch (err) {
