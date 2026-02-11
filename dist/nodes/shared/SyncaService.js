@@ -47,6 +47,11 @@ class SyncaService {
         const path = `/v1/invoke/${credentialsId}/${operation}`;
         return await this.authenticatedRequest(path, method, body, additionalOptions);
     }
+    async invokeMetadata(operation, method = 'POST', body) {
+        const credentialsId = this.context.getNodeParameter('credentials');
+        const path = `/v1/invoke/metadata/${credentialsId}/${operation}`;
+        return await this.authenticatedRequest(path, method, body);
+    }
     async getProviderCredentials(provider = '') {
         try {
             const { apiToken, baseUrl } = await this.getCredentials();

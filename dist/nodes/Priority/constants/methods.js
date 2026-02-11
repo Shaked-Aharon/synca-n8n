@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PriorityMethods = exports.operationToFormName = void 0;
+const SyncaService_1 = require("../../shared/SyncaService");
 exports.operationToFormName = {
     'list_products': 'LOGPART',
     'create_product': 'LOGPART',
@@ -44,33 +45,11 @@ function mapType(t) {
 exports.PriorityMethods = {
     loadOptions: {
         async getCredentials() {
-            try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const options = {
-                    method: 'GET',
-                    url: `${credentials.baseUrl}/v1/invoke/get-credentials`,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                };
-                const response = await this.helpers.httpRequest(options);
-                if (Array.isArray(response)) {
-                    return response.map((cred) => ({
-                        name: cred.name || cred.id,
-                        value: cred.id,
-                    }));
-                }
-                return [];
-            }
-            catch (error) {
-                return [];
-            }
+            const service = new SyncaService_1.SyncaService(this);
+            return await service.getProviderCredentials();
         },
         async getSubForms() {
-            var _a;
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
                 const operation = this.getNodeParameter('operation');
                 let formName;
                 try {
@@ -79,16 +58,8 @@ exports.PriorityMethods = {
                 catch (e) {
                     formName = exports.operationToFormName[operation];
                 }
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                    body: { formName: (_a = exports.operationToFormName[operation]) !== null && _a !== void 0 ? _a : formName }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_subforms', 'POST', { formName });
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred) => ({
                         name: cred.name || cred.id,
@@ -103,17 +74,8 @@ exports.PriorityMethods = {
         },
         async getForms() {
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_forms`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_forms', 'POST');
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred) => ({
                         name: cred.name || cred.id,
@@ -128,8 +90,6 @@ exports.PriorityMethods = {
         },
         async getFormFields() {
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
                 const operation = this.getNodeParameter('operation');
                 let formName;
                 try {
@@ -143,16 +103,8 @@ exports.PriorityMethods = {
                     subFormName = this.getNodeParameter('subFormName');
                 }
                 catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                    body: { formName, subFormName }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_form_fields', 'POST', { formName, subFormName });
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred) => ({
                         name: cred.name || cred.id,
@@ -167,17 +119,8 @@ exports.PriorityMethods = {
         },
         async getProcedures() {
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedures`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_procedures', 'POST');
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred) => ({
                         name: cred.name || cred.id,
@@ -195,18 +138,8 @@ exports.PriorityMethods = {
         async getMappingColumns() {
             var _a, _b, _c;
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedure_columns`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                    body: { procedure_name: this.getNodeParameter('procedureName') }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_procedure_columns', 'POST', { procedure_name: this.getNodeParameter('procedureName') });
                 let results = [];
                 if (Array.isArray((_a = response.data) === null || _a === void 0 ? void 0 : _a.EditFields)) {
                     results = response.data.EditFields.map((f, i) => ({
@@ -235,8 +168,6 @@ exports.PriorityMethods = {
         },
         async getFormFields() {
             try {
-                const credentials = await this.getCredentials('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials');
                 const operation = this.getNodeParameter('operation');
                 let formName;
                 try {
@@ -255,16 +186,8 @@ exports.PriorityMethods = {
                     subSubFormName = this.getNodeParameter('subSubFormName');
                 }
                 catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields_for_add`;
-                const options = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials === null || credentials === void 0 ? void 0 : credentials.apiToken,
-                    },
-                    body: { operation, formName, subFormName, subSubFormName }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService_1.SyncaService(this);
+                const response = await service.invokeMetadata('get_form_fields_for_add', 'POST', { operation, formName, subFormName, subSubFormName });
                 if (response.success === false) {
                     return { fields: [], emptyFieldsNotice: response.error.message };
                 }

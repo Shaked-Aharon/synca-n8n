@@ -11,6 +11,7 @@ export declare class SyncaService {
     request(options: IHttpRequestOptions): Promise<any>;
     authenticatedRequest(path: string, method?: string, body?: any | undefined, additionalOptions?: Partial<IHttpRequestOptions>): Promise<any>;
     invoke(credentialsId: string, operation: string, body?: any, method?: string, additionalOptions?: Partial<IHttpRequestOptions>): Promise<any>;
+    invokeMetadata(operation: string, method?: string, body?: any): Promise<any>;
     getProviderCredentials(provider?: string): Promise<{
         name: string;
         value: string;
