@@ -1,4 +1,5 @@
-import { ILoadOptionsFunctions, INodePropertyOptions, IHttpRequestOptions, ResourceMapperFields, ResourceMapperField } from "n8n-workflow";
+import { ILoadOptionsFunctions, INodePropertyOptions, ResourceMapperFields, ResourceMapperField } from "n8n-workflow";
+import { SyncaService } from "../../shared/SyncaService";
 
 export const operationToFormName: Record<string, string> = {
     'list_products': 'LOGPART',
@@ -46,54 +47,22 @@ function mapType(t: string): 'string' | 'number' | 'dateTime' | 'time' | 'boolea
 export const PriorityMethods = {
     loadOptions: {
         async getCredentials(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-            try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const options: IHttpRequestOptions = {
-                    method: 'GET',
-                    url: `${credentials.baseUrl}/v1/invoke/get-credentials`,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                };
-
-                const response = await this.helpers.httpRequest(options);
-
-                if (Array.isArray(response)) {
-                    return response.map((cred: any) => ({
-                        name: cred.name || cred.id,
-                        value: cred.id,
-                    }));
-                }
-
-                return [];
-            } catch (error) {
-                return [];
-            }
+            const service = new SyncaService(this);
+            return await service.getProviderCredentials();
         },
 
         async getSubForms(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
                 const operation = this.getNodeParameter('operation') as string;
-                // const formName = this.getNodeParameter('formName') as string;
                 let formName;
                 try {
                     formName = this.getNodeParameter('formName') as string;
                 } catch (e) {
                     formName = operationToFormName[operation];
                 }
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_subforms`;
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                    body: { formName: operationToFormName[operation] ?? formName }
-                };
+                const service = new SyncaService(this);
 
-                const response = await this.helpers.httpRequest(options);
+                const response = await service.invokeMetadata('get_subforms', 'POST', { formName });
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred: any) => ({
                         name: cred.name || cred.id,
@@ -109,19 +78,8 @@ export const PriorityMethods = {
 
         async getForms(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
-
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_forms`;
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    }
-                };
-
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService(this);
+                const response = await service.invokeMetadata('get_forms', 'POST');
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred: any) => ({
                         name: cred.name || cred.id,
@@ -137,10 +95,6 @@ export const PriorityMethods = {
         },
         async getFormFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
-                // const formName = this.getNodeParameter('formName') as string;
-                // const subFormName = this.getNodeParameter('subFormName', '') as string;
                 const operation = this.getNodeParameter('operation') as string;
                 let formName;
                 try {
@@ -158,18 +112,9 @@ export const PriorityMethods = {
                 // try {
                 //     subSubFormName = this.getNodeParameter('subSubFormName') as string;
                 // } catch (e) { }
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields`;
 
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                    body: { formName, subFormName }
-                };
-
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService(this);
+                const response = await service.invokeMetadata('get_form_fields', 'POST', { formName, subFormName });
 
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred: any) => ({
@@ -186,19 +131,8 @@ export const PriorityMethods = {
 
         async getProcedures(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
-
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedures`;
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                };
-
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService(this);
+                const response = await service.invokeMetadata('get_procedures', 'POST');
                 if (Array.isArray(response.data)) {
                     return response.data.map((cred: any) => ({
                         name: cred.name || cred.id,
@@ -215,20 +149,8 @@ export const PriorityMethods = {
     resourceMapping: {
         async getMappingColumns(this: ILoadOptionsFunctions): Promise<ResourceMapperFields> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
-
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_procedure_columns`;
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                    body: { procedure_name: this.getNodeParameter('procedureName') }
-                };
-
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService(this);
+                const response = await service.invokeMetadata('get_procedure_columns', 'POST', { procedure_name: this.getNodeParameter('procedureName') });
                 let results: ResourceMapperField[] = [];
                 if (Array.isArray(response.data?.EditFields)) {
                     results = response.data.EditFields.map((f: any, i: number) => ({
@@ -257,8 +179,6 @@ export const PriorityMethods = {
 
         async getFormFields(this: ILoadOptionsFunctions): Promise<ResourceMapperFields> {
             try {
-                const credentials = await this.getCredentials<{ apiToken: string; baseUrl: string; }>('customSyncaApiCredentials');
-                const credentialsId = this.getNodeParameter('credentials') as string;
                 const operation = this.getNodeParameter('operation') as string;
                 let formName;
                 try {
@@ -277,17 +197,8 @@ export const PriorityMethods = {
                     subSubFormName = this.getNodeParameter('subSubFormName') as string;
                 } catch (e) { }
 
-                // const subFormName = this.getNodeParameter('subFormName', '') as string;
-                const url = `${credentials.baseUrl}/v1/invoke/metadata/${credentialsId}/get_form_fields_for_add`;
-                const options: IHttpRequestOptions = {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        'x-api-token': credentials?.apiToken as string,
-                    },
-                    body: { operation, formName, subFormName, subSubFormName }
-                };
-                const response = await this.helpers.httpRequest(options);
+                const service = new SyncaService(this);
+                const response = await service.invokeMetadata('get_form_fields_for_add', 'POST', { operation, formName, subFormName, subSubFormName });
                 if (response.success === false) {
                     return { fields: [], emptyFieldsNotice: response.error.message }
                 }

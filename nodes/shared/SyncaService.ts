@@ -66,6 +66,12 @@ export class SyncaService {
         return await this.authenticatedRequest(path, method, body, additionalOptions);
     }
 
+    async invokeMetadata(operation: string, method: string = 'POST', body?: any): Promise<any> {
+        const credentialsId = this.context.getNodeParameter('credentials' as any) as string;
+        const path = `/v1/invoke/metadata/${credentialsId}/${operation}`;
+        return await this.authenticatedRequest(path, method, body);
+    }
+
     async getProviderCredentials(provider: string = ''): Promise<{ name: string, value: string }[]> {
         try {
             const { apiToken, baseUrl } = await this.getCredentials();
