@@ -32,8 +32,8 @@ export class SyncaService {
         const timestamp = Math.floor(Date.now() / 1000).toString();
 
         let bodyForSignature = body;
-        if (typeof body === 'object' && Object.keys(body).length > 0) {
-            bodyForSignature = JSON.stringify(body);
+        if (typeof body === 'object') {
+            bodyForSignature = Object.keys(body).length > 0 ? JSON.stringify(body) : '';
         } else if (body === undefined || body === null) {
             bodyForSignature = '';
         } else {
